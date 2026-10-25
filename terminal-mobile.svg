@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="1198" viewBox="0 0 480 1198" preserveAspectRatio="xMidYMid meet">
+    <style>
+        .bg { fill: #0d1117; }
+        text { font-family: 'Courier New', Courier, monospace; }
+        .ascii { font-size: 10px; fill: #db904e; font-weight: bold; }
+        .term-text { font-size: 13px; }
+        .accent { fill: #db904e; font-weight: bold; }
+        .dots { fill: #484f58; }
+        .val { fill: #9fcff8; }
+        @media (prefers-color-scheme: light) {
+            .bg { fill: #f6f8fa; }
+            .val { fill: #0550ae; }
+            .dots { fill: #8c959f; }
+            .ascii { fill: #b25012; }
+        }
+    </style>
+    <rect width="100%" height="100%" rx="10" class="bg"/>
+<g transform="translate(15.00,40.00)">
+<text x="0" y="0" class="ascii" xml:space="preserve">                                                                                                    </text>
+<text x="0" y="10" class="ascii" xml:space="preserve">                                      ++                                                            </text>
+<text x="0" y="20" class="ascii" xml:space="preserve">                                      +++                                                           </text>
+<text x="0" y="30" class="ascii" xml:space="preserve">                                     ++#++                                                          </text>
+<text x="0" y="40" class="ascii" xml:space="preserve">                                     +###+                        ++++                              </text>
+<text x="0" y="50" class="ascii" xml:space="preserve">                                   ++####+    +++++++++++++++++++++++                               </text>
+<text x="0" y="60" class="ascii" xml:space="preserve">                                  ++####++++####################+++                                 </text>
+<text x="0" y="70" class="ascii" xml:space="preserve">                   ++++         +++#########################+++++                                   </text>
+<text x="0" y="80" class="ascii" xml:space="preserve">                   ++###+++++++++################################+++++                              </text>
+<text x="0" y="90" class="ascii" xml:space="preserve">                    +++################################################+++++++                      </text>
+<text x="0" y="100" class="ascii" xml:space="preserve">                      ++++++################################################++                      </text>
+<text x="0" y="110" class="ascii" xml:space="preserve">                      +++############################################+++++++                        </text>
+<text x="0" y="120" class="ascii" xml:space="preserve">                      ++############################################+                               </text>
+<text x="0" y="130" class="ascii" xml:space="preserve">                    ++++#############################################++                             </text>
+<text x="0" y="140" class="ascii" xml:space="preserve">                   ++++###############################################++                            </text>
+<text x="0" y="150" class="ascii" xml:space="preserve">                ++++###################################++######+########++                          </text>
+<text x="0" y="160" class="ascii" xml:space="preserve">           ++++++#######################################++######+########++                         </text>
+<text x="0" y="170" class="ascii" xml:space="preserve">          ++######################################+######++#####+##########++                       </text>
+<text x="0" y="180" class="ascii" xml:space="preserve">              ++++++##############################+######+++#####+##########+++                     </text>
+<text x="0" y="190" class="ascii" xml:space="preserve">                 ++###############################+###+---++----##+###########++                    </text>
+<text x="0" y="200" class="ascii" xml:space="preserve">                ++#######################+########+#+.++++++++++-+++####+++#####++                  </text>
+<text x="0" y="210" class="ascii" xml:space="preserve">               ++########################+########++-++++++++++---+++###++                          </text>
+<text x="0" y="220" class="ascii" xml:space="preserve">              ++##########################+#######+-++++++++++-----#++###++                         </text>
+<text x="0" y="230" class="ascii" xml:space="preserve">             ++####+############+########+##+####++-++++++++-------##+++##++                        </text>
+<text x="0" y="240" class="ascii" xml:space="preserve">           +++++++++#############+#####+#+##+####+--++++++---------##-   +++++                      </text>
+<text x="0" y="250" class="ascii" xml:space="preserve">                   +#############++####+++##+###++#-+++++----------#+-                              </text>
+<text x="0" y="260" class="ascii" xml:space="preserve">                  ++###########---+####++##++##++##--++------------##-                              </text>
+<text x="0" y="270" class="ascii" xml:space="preserve">                  ++#++######+-####+###++##++#++####+------------####+--                            </text>
+<text x="0" y="280" class="ascii" xml:space="preserve">                  ++++++#####-######++#++++#+++########----..-+########-.                           </text>
+<text x="0" y="290" class="ascii" xml:space="preserve">                 +++   +####-+########+++###+###########################-                           </text>
+<text x="0" y="300" class="ascii" xml:space="preserve">                 +      +####-##########################################-                           </text>
+<text x="0" y="310" class="ascii" xml:space="preserve">                        +#+++--########################################+.                           </text>
+<text x="0" y="320" class="ascii" xml:space="preserve">                        ++++++#---+#####################+-+###########--                            </text>
+<text x="0" y="330" class="ascii" xml:space="preserve">                         ++  +++++#++-####################+--#######..-                             </text>
+<text x="0" y="340" class="ascii" xml:space="preserve">                               ++++++#-######################---...-                                </text>
+<text x="0" y="350" class="ascii" xml:space="preserve">                                  ++++####################-----                                     </text>
+<text x="0" y="360" class="ascii" xml:space="preserve">                                 .----------------------------                                      </text>
+<text x="0" y="370" class="ascii" xml:space="preserve">                                 --+++++++---------------------                                     </text>
+<text x="0" y="380" class="ascii" xml:space="preserve">                                 -++---------------------------                                     </text>
+<text x="0" y="390" class="ascii" xml:space="preserve">                                 -+---------------------------                                      </text>
+<text x="0" y="400" class="ascii" xml:space="preserve">                                 -+---------------------------                                      </text>
+<text x="0" y="410" class="ascii" xml:space="preserve">                                 -----------------------------                                      </text>
+<text x="0" y="420" class="ascii" xml:space="preserve">                                 -----------------------------                                      </text>
+<text x="0" y="430" class="ascii" xml:space="preserve">                                   ..--------------------                                           </text>
+<text x="0" y="440" class="ascii" xml:space="preserve">                                   -----------------------                                          </text>
+<text x="0" y="450" class="ascii" xml:space="preserve">                                  -------------------------                                         </text>
+<text x="0" y="460" class="ascii" xml:space="preserve">                                  .-----+++----------------                                         </text>
+<text x="0" y="470" class="ascii" xml:space="preserve">                                 -----+++++++---------------                                        </text>
+<text x="0" y="480" class="ascii" xml:space="preserve">                                 .---+++++++++---------------                                       </text>
+<text x="0" y="490" class="ascii" xml:space="preserve">                                ------+++++++++--------------                                       </text>
+<text x="0" y="500" class="ascii" xml:space="preserve">                                ---------------+--------------                                      </text>
+<text x="0" y="510" class="ascii" xml:space="preserve">                               --------------------------------                                     </text>
+<text x="0" y="520" class="ascii" xml:space="preserve">                               --------------------------------                                     </text>
+<text x="0" y="530" class="ascii" xml:space="preserve">                              ----------------------------------                                    </text>
+<text x="0" y="540" class="ascii" xml:space="preserve">                              ----------------------------------                                    </text>
+</g>
+<text x="25" y="623.00" class="term-text" xml:space="preserve"><tspan class="accent">sunraku@archlinux </tspan><tspan class="dots">-----------------------------------------</tspan></text>
+<text x="25" y="641.00" class="term-text" xml:space="preserve"><tspan class="accent">. OS:</tspan><tspan class="dots"> ................. </tspan><tspan class="val">Arch Linux, Windows 11, Android</tspan></text>
+<text x="25" y="659.00" class="term-text" xml:space="preserve"><tspan class="accent">. Player.Active:</tspan><tspan class="dots"> ...... </tspan><tspan class="val">19 years, 355 days (Level 19)</tspan></text>
+<text x="25" y="677.00" class="term-text" xml:space="preserve"><tspan class="accent">. Role:</tspan><tspan class="dots"> ............... </tspan><tspan class="val">Cloud &amp; DevOps Eng.</tspan></text>
+<text x="25" y="695.00" class="term-text" xml:space="preserve"><tspan class="accent">. Desktop:</tspan><tspan class="dots"> ............ </tspan><tspan class="val">Hyprland, Win Explorer</tspan></text>
+<text x="25" y="713.00" class="term-text" xml:space="preserve"><tspan class="accent">. Shell:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">zsh, PowerShell</tspan></text>
+<text x="25" y="731.00" class="term-text" xml:space="preserve"><tspan class="accent">. IDE:</tspan><tspan class="dots"> ................ </tspan><tspan class="val">Neovim, VS Code, Cursor</tspan></text>
+<text x="25" y="749.00" class="term-text" xml:space="preserve"><tspan class="accent">. Battery:</tspan><tspan class="dots"> ............ </tspan><tspan class="val">[ CHARGING ] 100%</tspan></text>
+<text x="25" y="767.00" class="term-text" xml:space="preserve"><tspan class="accent">. Fuel:</tspan><tspan class="dots"> ............... </tspan><tspan class="val">Coffee</tspan></text>
+<text x="25" y="785.00" class="term-text" xml:space="preserve"><tspan class="accent">. Audio:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">The Life of Ram | Govind Vasantha</tspan></text>
+<text x="25" y="821.00" class="term-text" xml:space="preserve"><tspan class="accent">. Languages.Core:</tspan><tspan class="dots"> ..... </tspan><tspan class="val">JavaScript, Python, Bash, C</tspan></text>
+<text x="25" y="839.00" class="term-text" xml:space="preserve"><tspan class="accent">. Languages.Web:</tspan><tspan class="dots"> ...... </tspan><tspan class="val">HTML, Tailwind, React, Node</tspan></text>
+<text x="25" y="857.00" class="term-text" xml:space="preserve"><tspan class="accent">. Languages.Real:</tspan><tspan class="dots"> ..... </tspan><tspan class="val">English, Tamil, Malayalam</tspan></text>
+<text x="25" y="875.00" class="term-text" xml:space="preserve"><tspan class="accent">. DevOps and DB:</tspan><tspan class="dots"> ...... </tspan><tspan class="val">Docker, Actions, Vercel, DuckDB</tspan></text>
+<text x="25" y="893.00" class="term-text" xml:space="preserve"><tspan class="accent">. Hardware:</tspan><tspan class="dots"> ........... </tspan><tspan class="val">ASUS Vivobook (AMD Ryzen 3)</tspan></text>
+<text x="25" y="911.00" class="term-text" xml:space="preserve"><tspan class="accent">. Hobbies:</tspan><tspan class="dots"> ............ </tspan><tspan class="val">System Ricing, Action RPGs, Anime</tspan></text>
+<text x="25" y="947.00" class="term-text" xml:space="preserve"><tspan class="accent">Contact </tspan><tspan class="dots">-------------------------------------------------</tspan></text>
+<text x="25" y="965.00" class="term-text" xml:space="preserve"><tspan class="accent">. Portfolio:</tspan><tspan class="dots"> .......... </tspan><tspan class="val">portfolio-weld-rho-75.vercel.app</tspan></text>
+<text x="25" y="983.00" class="term-text" xml:space="preserve"><tspan class="accent">. Email:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">braveenrprogrammer811@gmail.com</tspan></text>
+<text x="25" y="1001.00" class="term-text" xml:space="preserve"><tspan class="accent">. LinkedIn:</tspan><tspan class="dots"> ........... </tspan><tspan class="val">Braveen R</tspan></text>
+<text x="25" y="1019.00" class="term-text" xml:space="preserve"><tspan class="accent">. X (Twitter):</tspan><tspan class="dots"> ........ </tspan><tspan class="val">@braveenruban</tspan></text>
+<text x="25" y="1037.00" class="term-text" xml:space="preserve"><tspan class="accent">. Instagram:</tspan><tspan class="dots"> .......... </tspan><tspan class="val">braveen_r</tspan></text>
+<text x="25" y="1055.00" class="term-text" xml:space="preserve"><tspan class="accent">. Discord:</tspan><tspan class="dots"> ............ </tspan><tspan class="val">itz_sunraku</tspan></text>
+<text x="25" y="1073.00" class="term-text" xml:space="preserve"><tspan class="accent">. Location:</tspan><tspan class="dots"> ........... </tspan><tspan class="val">Bangalore (Study) | Kerala (Home)</tspan></text>
+<text x="25" y="1109.00" class="term-text" xml:space="preserve"><tspan class="accent">GitHub Stats </tspan><tspan class="dots">------------------------------------------</tspan></text>
+<text x="25" y="1127.00" class="term-text" xml:space="preserve"><tspan class="accent">. Repos:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">10 | Stars: 0</tspan></text>
+<text x="25" y="1145.00" class="term-text" xml:space="preserve"><tspan class="accent">. Commits:</tspan><tspan class="dots"> ............ </tspan><tspan class="val">83 | Followers: 1</tspan></text>
+<text x="25" y="1163.00" class="term-text" xml:space="preserve"><tspan class="accent">. Lines of Code:</tspan><tspan class="dots"> ...... </tspan><tspan class="val">10375++</tspan></text>
+</svg>
