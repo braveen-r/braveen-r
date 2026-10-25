@@ -1,0 +1,12 @@
+# Python cache and compiled bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local environment variables (if you ever use a .env file)
+.env
+
+# OS specific files
+.DS_Store
+Thumbs.db
