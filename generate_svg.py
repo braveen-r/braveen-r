@@ -206,23 +206,26 @@ with open("terminal.svg", "w", encoding="utf-8") as f:
 SVG_WIDTH_M = 480
 ASCII_TOP_M = 30
 rendered_ascii_height = ascii_height
-TERMINAL_TOP_M = ASCII_TOP_M + rendered_ascii_height + 55  # <-- Increased gap
+# Increased the offset from +55/+90 to +125 for a generous mobile gap
+TERMINAL_TOP_M = ASCII_TOP_M + rendered_ascii_height + 125
 SVG_HEIGHT_M = int(TERMINAL_TOP_M + (len(lines_data) * TERM_LINE_HEIGHT) + 30)
 
 mobile_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{SVG_WIDTH_M}" height="{SVG_HEIGHT_M}" viewBox="0 0 {SVG_WIDTH_M} {SVG_HEIGHT_M}" preserveAspectRatio="xMidYMid meet">
     <style>
         .bg {{ fill: #0d1117; }}
         text {{ font-family: 'Courier New', Courier, monospace; }}
-        .ascii {{ font-size: {ASCII_FONT_SIZE}px; fill: #db904e; font-weight: bold; }}
+        .ascii {{ font-size: {ASCII_FONT_SIZE}px; fill: #FFFFFF; font-weight: bold; }}
         .term-text {{ font-size: {TERM_FONT_SIZE}px; }}
         .accent {{ fill: #db904e; font-weight: bold; }}
         .dots {{ fill: #484f58; }}
         .val {{ fill: #9fcff8; }}
+
         @media (prefers-color-scheme: light) {{
             .bg {{ fill: #f6f8fa; }}
             .val {{ fill: #0550ae; }}
             .dots {{ fill: #8c959f; }}
             .ascii {{ fill: #b25012; }}
+            .ascii {{ font-size: {ASCII_FONT_SIZE}px; fill: #212529; font-weight: bold; }}
         }}
     </style>
     <rect width="100%" height="100%" rx="10" class="bg"/>
