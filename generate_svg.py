@@ -1,4 +1,3 @@
-
 import datetime
 import os
 import json
@@ -104,7 +103,6 @@ if github_token:
                 ["contributionCalendar"]["totalContributions"]
         )
 
-        # Estimate only, not actual measured lines of code.
         loc_total = f"{commits_count * 125}++"
 
     except Exception as e:
@@ -155,16 +153,18 @@ lines_data = [
 ]
 
 
-# --- 5. SVG RENDERING WITH DYNAMIC CENTERING ---
+# --- 5. SVG RENDERING ---
 
-# Change these two values freely.
+LAYOUT = "desktop"
+
 SVG_WIDTH = 950
 SVG_HEIGHT = 600
 
-# Layout settings
 PADDING_X = 24
 PADDING_Y = 24
-GAP = 10
+
+# Explicitly set to negative as requested for the overlay/layering effect
+GAP = -120
 
 ASCII_FONT_SIZE = 10
 ASCII_LINE_HEIGHT = 10
@@ -172,66 +172,73 @@ ASCII_LINE_HEIGHT = 10
 TERM_FONT_SIZE = 13
 TERM_LINE_HEIGHT = 18
 
-# Courier New is a monospace font: each character has a predictable width.
 ASCII_CHAR_WIDTH = ASCII_FONT_SIZE * 0.602
-GAP = -120
 TERM_CHAR_WIDTH = TERM_FONT_SIZE * 0.602
 
 
 def xml_escape(value):
-    """Escape text safely for SVG/XML."""
     return xml.sax.saxutils.escape(str(value))
 
 
 def terminal_row_text(row_type, key, val):
-    """Return the full visible text for width measurement."""
     if row_type == "header":
         return f"{key} {val}"
 
     if row_type == "item":
         key_str = f". {key}:"
         dots_len = max(24 - len(key_str), 1)
-        dots_str = " " + "." * dots_len + " "
-        return key_str + dots_str + str(val)
+        return key_str + " " + "." * dots_len + " " + str(val)
 
     return ""
 
 
-# Measure the ASCII art, preserving leading spaces.
 ascii_width = max(
     (len(line) * ASCII_CHAR_WIDTH for line in ascii_art),
     default=0,
 )
 
-# Measure the longest terminal row.
 terminal_width = max(
     (
-        len(terminal_row_text(row_type, key, val)) * TERM_CHAR_WIDTH
-        for row_type, key, val in lines_data
-        if row_type != "empty"
+        len(terminal_row_text(kind, key, val)) * TERM_CHAR_WIDTH
+        for kind, key, val in lines_data
+        if kind != "empty"
     ),
     default=0,
 )
 
-# Heights use actual rendered row counts.
 ascii_height = max(len(ascii_art), 1) * ASCII_LINE_HEIGHT
 terminal_height = max(len(lines_data), 1) * TERM_LINE_HEIGHT
 
-# Overall bounding box of the complete two-column layout.
-CONTENT_WIDTH = ascii_width + GAP + terminal_width
-CONTENT_HEIGHT = max(ascii_height, terminal_height)
+if LAYOUT == "mobile":
+    SVG_WIDTH = 380
+    ascii_scale = min(1.0, (SVG_WIDTH - 2 * PADDING_X) / max(ascii_width, 1))
+    rendered_ascii_width = ascii_width * ascii_scale
+    rendered_ascii_height = ascii_height * ascii_scale
 
-# Center the complete group horizontally and vertically.
-# If the content is larger than the canvas, align it to the padding.
-CONTENT_X = max((SVG_WIDTH - CONTENT_WIDTH) / 2, PADDING_X)
-CONTENT_Y = max((SVG_HEIGHT - CONTENT_HEIGHT) / 2, PADDING_Y)
+    SVG_HEIGHT = int(PADDING_Y + rendered_ascii_height + 24 + terminal_height + PADDING_Y)
 
-ASCII_X = CONTENT_X
-TERMINAL_X = ASCII_X + ascii_width + GAP
+    ASCII_X = (SVG_WIDTH - rendered_ascii_width) / 2
+    ASCII_TOP = PADDING_Y
 
-# SVG text y-coordinates are baselines, not top edges.
-ASCII_START_Y = CONTENT_Y + ASCII_FONT_SIZE
-TERMINAL_START_Y = CONTENT_Y + TERM_FONT_SIZE
+    TERMINAL_X = max(PADDING_X, (SVG_WIDTH - terminal_width) / 2)
+    TERMINAL_TOP = ASCII_TOP + rendered_ascii_height + 24
+
+else:
+    ascii_scale = 1.0
+    CONTENT_WIDTH = ascii_width + GAP + terminal_width
+    CONTENT_HEIGHT = max(ascii_height, terminal_height)
+
+    SVG_WIDTH = max(SVG_WIDTH, int(CONTENT_WIDTH + 2 * PADDING_X))
+    SVG_HEIGHT = max(SVG_HEIGHT, int(CONTENT_HEIGHT + 2 * PADDING_Y))
+
+    CONTENT_X = (SVG_WIDTH - CONTENT_WIDTH) / 2
+    CONTENT_Y = (SVG_HEIGHT - CONTENT_HEIGHT) / 2
+
+    ASCII_X = CONTENT_X
+    TERMINAL_X = ASCII_X + ascii_width + GAP
+
+    ASCII_TOP = CONTENT_Y
+    TERMINAL_TOP = CONTENT_Y
 
 
 svg_template = f"""<svg
@@ -254,6 +261,7 @@ svg_template = f"""<svg
             .bg {{ fill: #f6f8fa; }}
             .val {{ fill: #0550ae; }}
             .dots {{ fill: #8c959f; }}
+            .ascii {{ fill: #b25012; }}
             .ascii {{ font-size: {ASCII_FONT_SIZE}px; fill: #212529; font-weight: bold; }}
         }}
     </style>
@@ -261,38 +269,36 @@ svg_template = f"""<svg
     <rect width="100%" height="100%" rx="10" class="bg"/>
 """
 
-
 # Render ASCII art.
-y_offset = ASCII_START_Y
+svg_template += (
+    f'<g transform="translate({ASCII_X:.2f},'
+    f'{ASCII_TOP + ASCII_FONT_SIZE * ascii_scale:.2f}) '
+    f'scale({ascii_scale:.5f})">\n'
+)
 
-for line in ascii_art:
-    line_escaped = xml_escape(line)
-
+for i, line in enumerate(ascii_art):
     svg_template += (
-        f'    <text x="{ASCII_X:.2f}" y="{y_offset:.2f}" '
-        f'class="ascii" xml:space="preserve">{line_escaped}</text>\n'
+        f'<text x="0" y="{i * ASCII_LINE_HEIGHT}" '
+        f'class="ascii" xml:space="preserve">'
+        f'{xml_escape(line)}</text>\n'
     )
 
-    y_offset += ASCII_LINE_HEIGHT
+svg_template += "</g>\n"
 
-
-# Render terminal text.
-y_offset = TERMINAL_START_Y
+# Render terminal information.
+y_offset = TERMINAL_TOP + TERM_FONT_SIZE
 
 for row_type, key, val in lines_data:
     if row_type == "empty":
         y_offset += TERM_LINE_HEIGHT
         continue
 
-    key_escaped = xml_escape(key)
-    val_escaped = xml_escape(val)
-
     if row_type == "header":
         svg_template += (
-            f'    <text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
+            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
             f'class="term-text" xml:space="preserve">'
-            f'<tspan class="accent">{key_escaped} </tspan>'
-            f'<tspan class="dots">{val_escaped}</tspan>'
+            f'<tspan class="accent">{xml_escape(key)} </tspan>'
+            f'<tspan class="dots">{xml_escape(val)}</tspan>'
             f'</text>\n'
         )
 
@@ -302,16 +308,15 @@ for row_type, key, val in lines_data:
         dots_str = " " + "." * dots_len + " "
 
         svg_template += (
-            f'    <text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
+            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
             f'class="term-text" xml:space="preserve">'
             f'<tspan class="accent">{xml_escape(key_str)}</tspan>'
             f'<tspan class="dots">{xml_escape(dots_str)}</tspan>'
-            f'<tspan class="val">{val_escaped}</tspan>'
+            f'<tspan class="val">{xml_escape(val)}</tspan>'
             f'</text>\n'
         )
 
     y_offset += TERM_LINE_HEIGHT
-
 
 svg_template += "</svg>\n"
 
@@ -321,6 +326,3 @@ with open("terminal.svg", "w", encoding="utf-8") as f:
     f.write(svg_template)
 
 print("terminal.svg successfully generated!")
-print(f"Canvas: {SVG_WIDTH} x {SVG_HEIGHT}")
-print(f"Content origin: x={CONTENT_X:.2f}, y={CONTENT_Y:.2f}")
-print(f"Estimated content size: {CONTENT_WIDTH:.2f} x {CONTENT_HEIGHT:.2f}")
