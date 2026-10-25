@@ -206,7 +206,7 @@ with open("terminal.svg", "w", encoding="utf-8") as f:
 SVG_WIDTH_M = 480
 ASCII_TOP_M = 30
 rendered_ascii_height = ascii_height
-TERMINAL_TOP_M = ASCII_TOP_M + rendered_ascii_height + 30
+TERMINAL_TOP_M = ASCII_TOP_M + rendered_ascii_height + 55  # <-- Increased gap
 SVG_HEIGHT_M = int(TERMINAL_TOP_M + (len(lines_data) * TERM_LINE_HEIGHT) + 30)
 
 mobile_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{SVG_WIDTH_M}" height="{SVG_HEIGHT_M}" viewBox="0 0 {SVG_WIDTH_M} {SVG_HEIGHT_M}" preserveAspectRatio="xMidYMid meet">
