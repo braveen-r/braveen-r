@@ -72,9 +72,7 @@ if github_token:
 # --- 3. ASCII LOAD ---
 try:
     with open("ascii-art.txt", "r", encoding="utf-8") as f:
-        # Strip trailing spaces on the right so width is measured from actual visible characters
         raw_lines = [line.rstrip() for line in f.read().splitlines()]
-        # Also remove common empty left margin so there is no dead space on the left
         non_empty = [line for line in raw_lines if line.strip()]
         min_indent = min((len(line) - len(line.lstrip(" ")) for line in non_empty), default=0)
         ascii_art = [line[min_indent:] for line in raw_lines]
@@ -131,16 +129,16 @@ def terminal_row_text(row_type, key, val):
 # --- 5. GENERATE RESPONSIVE SVG ---
 PADDING_X = 30
 PADDING_Y = 30
-# Because trailing spaces are now stripped, 24px is the exact clean gap from the rightmost hair tip!
-GAP = 24
+GAP = 32
 
 ASCII_FONT_SIZE = 10
-ASCII_LINE_HEIGHT = 10
+ASCII_LINE_HEIGHT = 11
 TERM_FONT_SIZE = 13
-TERM_LINE_HEIGHT = 18
+TERM_LINE_HEIGHT = 19
 
-ASCII_CHAR_WIDTH = ASCII_FONT_SIZE * 0.602
-TERM_CHAR_WIDTH = TERM_FONT_SIZE * 0.602
+# Natural character width allowance so mobile and desktop fonts never feel squished
+ASCII_CHAR_WIDTH = ASCII_FONT_SIZE * 0.63
+TERM_CHAR_WIDTH = TERM_FONT_SIZE * 0.63
 
 ascii_width = max((len(line) * ASCII_CHAR_WIDTH for line in ascii_art), default=0)
 terminal_width = max((len(terminal_row_text(k, kv, v)) * TERM_CHAR_WIDTH for k, kv, v in lines_data if k != "empty"), default=0)
@@ -179,32 +177,26 @@ svg_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="
     <rect width="100%" height="100%" rx="10" class="bg"/>
 """
 
-# Render ASCII art with exact textLength so Android/iOS fonts NEVER expand and overlap the text
+# Render ASCII art naturally without glyph compression
 svg_template += f'<g transform="translate({ASCII_X:.2f},{ASCII_TOP + ASCII_FONT_SIZE:.2f})">\n'
 for i, line in enumerate(ascii_art):
     if line:
-        line_w = len(line) * ASCII_CHAR_WIDTH
         svg_template += (
             f'<text x="0" y="{i * ASCII_LINE_HEIGHT}" '
-            f'textLength="{line_w:.2f}" lengthAdjust="spacingAndGlyphs" '
             f'class="ascii" xml:space="preserve">{xml_escape(line)}</text>\n'
         )
 svg_template += "</g>\n"
 
-# Render terminal text with exact textLength so columns stay razor-sharp on mobile and desktop
+# Render terminal text naturally without glyph compression
 y_offset = TERMINAL_TOP + TERM_FONT_SIZE
 for row_type, key, val in lines_data:
     if row_type == "empty":
         y_offset += TERM_LINE_HEIGHT
         continue
 
-    full_row_str = terminal_row_text(row_type, key, val)
-    row_w = len(full_row_str) * TERM_CHAR_WIDTH
-
     if row_type == "header":
         svg_template += (
             f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
-            f'textLength="{row_w:.2f}" lengthAdjust="spacingAndGlyphs" '
             f'class="term-text" xml:space="preserve">'
             f'<tspan class="accent">{xml_escape(key)} </tspan>'
             f'<tspan class="dots">{xml_escape(val)}</tspan></text>\n'
@@ -215,7 +207,6 @@ for row_type, key, val in lines_data:
         dots_str = " " + "." * dots_len + " "
         svg_template += (
             f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
-            f'textLength="{row_w:.2f}" lengthAdjust="spacingAndGlyphs" '
             f'class="term-text" xml:space="preserve">'
             f'<tspan class="accent">{xml_escape(key_str)}</tspan>'
             f'<tspan class="dots">{xml_escape(dots_str)}</tspan>'
@@ -228,4 +219,4 @@ svg_template += "</svg>\n"
 with open("terminal.svg", "w", encoding="utf-8") as f:
     f.write(svg_template)
 
-print("terminal.svg generated with locked mobile/desktop alignment!")
+print("terminal.svg generated without compression!")
