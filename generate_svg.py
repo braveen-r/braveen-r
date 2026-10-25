@@ -124,8 +124,6 @@ def terminal_row_text(row_type, key, val):
     return ""
 
 # --- 5A. GENERATE DESKTOP SVG ---
-SVG_WIDTH_D = 950
-SVG_HEIGHT_D = 600
 PADDING_X_D = 24
 PADDING_Y_D = 24
 GAP_D = -120
@@ -147,17 +145,18 @@ terminal_height = max(len(lines_data), 1) * TERM_LINE_HEIGHT
 CONTENT_WIDTH = ascii_width + GAP_D + terminal_width
 CONTENT_HEIGHT = max(ascii_height, terminal_height)
 
-SVG_WIDTH_D = max(SVG_WIDTH_D, int(CONTENT_WIDTH + 2 * PADDING_X_D))
-SVG_HEIGHT_D = max(SVG_HEIGHT_D, int(CONTENT_HEIGHT + 2 * PADDING_Y_D))
+# Wrap tightly around content with zero wasted margin so it scales cleanly on all screens
+SVG_WIDTH_D = int(CONTENT_WIDTH + 2 * PADDING_X_D)
+SVG_HEIGHT_D = int(CONTENT_HEIGHT + 2 * PADDING_Y_D)
 
-CONTENT_X = (SVG_WIDTH_D - CONTENT_WIDTH) / 2
-CONTENT_Y = (SVG_HEIGHT_D - CONTENT_HEIGHT) / 2
+CONTENT_X = PADDING_X_D
+CONTENT_Y = PADDING_Y_D
 ASCII_X = CONTENT_X
 TERMINAL_X = ASCII_X + ascii_width + GAP_D
-ASCII_TOP = CONTENT_Y
-TERMINAL_TOP = CONTENT_Y
+ASCII_TOP = CONTENT_Y + (CONTENT_HEIGHT - ascii_height) / 2
+TERMINAL_TOP = CONTENT_Y + (CONTENT_HEIGHT - terminal_height) / 2
 
-desktop_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{SVG_WIDTH_D}" height="{SVG_HEIGHT_D}" viewBox="0 0 {SVG_WIDTH_D} {SVG_HEIGHT_D}" preserveAspectRatio="xMidYMid meet">
+desktop_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 {SVG_WIDTH_D} {SVG_HEIGHT_D}" preserveAspectRatio="xMidYMid meet">
     <style>
         .bg {{ fill: #0d1117; }}
         text {{ font-family: 'Courier New', Courier, monospace; }}
@@ -203,14 +202,14 @@ with open("terminal.svg", "w", encoding="utf-8") as f:
 
 
 # --- 5B. GENERATE MOBILE SVG (Stacked Layout) ---
-SVG_WIDTH_M = 480
+PADDING_X_M = 20
+SVG_WIDTH_M = int(max(ascii_width, terminal_width) + 2 * PADDING_X_M)
 ASCII_TOP_M = 30
 rendered_ascii_height = ascii_height
-# Increased the offset from +55/+90 to +125 for a generous mobile gap
-TERMINAL_TOP_M = ASCII_TOP_M + rendered_ascii_height + 125
-SVG_HEIGHT_M = int(TERMINAL_TOP_M + (len(lines_data) * TERM_LINE_HEIGHT) + 30)
+TERMINAL_TOP_M = ASCII_TOP_M + rendered_ascii_height + 40
+SVG_HEIGHT_M = int(TERMINAL_TOP_M + terminal_height + 30)
 
-mobile_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{SVG_WIDTH_M}" height="{SVG_HEIGHT_M}" viewBox="0 0 {SVG_WIDTH_M} {SVG_HEIGHT_M}" preserveAspectRatio="xMidYMid meet">
+mobile_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 {SVG_WIDTH_M} {SVG_HEIGHT_M}" preserveAspectRatio="xMidYMid meet">
     <style>
         .bg {{ fill: #0d1117; }}
         text {{ font-family: 'Courier New', Courier, monospace; }}
@@ -232,28 +231,26 @@ mobile_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{SVG_WIDTH_
 """
 
 # Center ASCII art horizontally on mobile
-ascii_max_len = max((len(line) for line in ascii_art), default=1)
-ascii_pixel_width = ascii_max_len * ASCII_CHAR_WIDTH
-ascii_x_m = max(15, (SVG_WIDTH_M - ascii_pixel_width) / 2)
+ascii_x_m = max(PADDING_X_M, (SVG_WIDTH_M - ascii_width) / 2)
 
 mobile_template += f'<g transform="translate({ascii_x_m:.2f},{ASCII_TOP_M + ASCII_FONT_SIZE:.2f})">\n'
 for i, line in enumerate(ascii_art):
     mobile_template += f'<text x="0" y="{i * ASCII_LINE_HEIGHT}" class="ascii" xml:space="preserve">{xml_escape(line)}</text>\n'
 mobile_template += "</g>\n"
 
-terminal_x_m = 25
+terminal_x_m = max(PADDING_X_M, (SVG_WIDTH_M - terminal_width) / 2)
 y_offset_m = TERMINAL_TOP_M + TERM_FONT_SIZE
 for row_type, key, val in lines_data:
     if row_type == "empty":
         y_offset_m += TERM_LINE_HEIGHT
         continue
     if row_type == "header":
-        mobile_template += f'<text x="{terminal_x_m}" y="{y_offset_m:.2f}" class="term-text" xml:space="preserve"><tspan class="accent">{xml_escape(key)} </tspan><tspan class="dots">{xml_escape(val)}</tspan></text>\n'
+        mobile_template += f'<text x="{terminal_x_m:.2f}" y="{y_offset_m:.2f}" class="term-text" xml:space="preserve"><tspan class="accent">{xml_escape(key)} </tspan><tspan class="dots">{xml_escape(val)}</tspan></text>\n'
     elif row_type == "item":
         key_str = f". {key}:"
-        dots_len = max(22 - len(key_str), 1)
+        dots_len = max(24 - len(key_str), 1)
         dots_str = " " + "." * dots_len + " "
-        mobile_template += f'<text x="{terminal_x_m}" y="{y_offset_m:.2f}" class="term-text" xml:space="preserve"><tspan class="accent">{xml_escape(key_str)}</tspan><tspan class="dots">{xml_escape(dots_str)}</tspan><tspan class="val">{xml_escape(val)}</tspan></text>\n'
+        mobile_template += f'<text x="{terminal_x_m:.2f}" y="{y_offset_m:.2f}" class="term-text" xml:space="preserve"><tspan class="accent">{xml_escape(key_str)}</tspan><tspan class="dots">{xml_escape(dots_str)}</tspan><tspan class="val">{xml_escape(val)}</tspan></text>\n'
     y_offset_m += TERM_LINE_HEIGHT
 mobile_template += "</svg>\n"
 
