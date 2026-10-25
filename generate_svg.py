@@ -126,19 +126,22 @@ def terminal_row_text(row_type, key, val):
         return key_str + " " + "." * dots_len + " " + str(val)
     return ""
 
-# --- 5. GENERATE RESPONSIVE SVG ---
-PADDING_X = 30
-PADDING_Y = 30
-GAP = 32
+# --- 5. GENERATE SVG ---
+PADDING_X = 24
+PADDING_Y = 24
 
+# Tight gap from the visible edge of the hair so there is no big empty void in the middle
+GAP = 12
+
+# Restored your exact original 10/10 and 13/18 proportions
 ASCII_FONT_SIZE = 10
-ASCII_LINE_HEIGHT = 11
-TERM_FONT_SIZE = 13
-TERM_LINE_HEIGHT = 19
+ASCII_LINE_HEIGHT = 10
+TERM_FONT_SIZE = 13.5
+TERM_LINE_HEIGHT = 18
 
-# Natural character width allowance so mobile and desktop fonts never feel squished
-ASCII_CHAR_WIDTH = ASCII_FONT_SIZE * 0.63
-TERM_CHAR_WIDTH = TERM_FONT_SIZE * 0.63
+# Exact width ratio for Consolas / DejaVu Sans Mono
+ASCII_CHAR_WIDTH = ASCII_FONT_SIZE * 0.56
+TERM_CHAR_WIDTH = TERM_FONT_SIZE * 0.58
 
 ascii_width = max((len(line) * ASCII_CHAR_WIDTH for line in ascii_art), default=0)
 terminal_width = max((len(terminal_row_text(k, kv, v)) * TERM_CHAR_WIDTH for k, kv, v in lines_data if k != "empty"), default=0)
@@ -157,10 +160,10 @@ TERMINAL_X = ASCII_X + ascii_width + GAP
 ASCII_TOP = PADDING_Y + (CONTENT_HEIGHT - ascii_height) / 2
 TERMINAL_TOP = PADDING_Y + (CONTENT_HEIGHT - terminal_height) / 2
 
-svg_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 {SVG_WIDTH} {SVG_HEIGHT}" preserveAspectRatio="xMidYMid meet">
+svg_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{SVG_WIDTH}" height="{SVG_HEIGHT}" viewBox="0 0 {SVG_WIDTH} {SVG_HEIGHT}" preserveAspectRatio="xMidYMid meet">
     <style>
         .bg {{ fill: #0d1117; }}
-        text {{ font-family: 'Courier New', Courier, monospace; }}
+        text {{ font-family: 'Consolas', 'DejaVu Sans Mono', 'Liberation Mono', 'Ubuntu Mono', 'Courier New', monospace; }}
         .ascii {{ font-size: {ASCII_FONT_SIZE}px; fill: #FFFFFF; font-weight: bold; }}
         .term-text {{ font-size: {TERM_FONT_SIZE}px; }}
         .accent {{ fill: #db904e; font-weight: bold; }}
@@ -177,7 +180,6 @@ svg_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="
     <rect width="100%" height="100%" rx="10" class="bg"/>
 """
 
-# Render ASCII art naturally without glyph compression
 svg_template += f'<g transform="translate({ASCII_X:.2f},{ASCII_TOP + ASCII_FONT_SIZE:.2f})">\n'
 for i, line in enumerate(ascii_art):
     if line:
@@ -187,7 +189,6 @@ for i, line in enumerate(ascii_art):
         )
 svg_template += "</g>\n"
 
-# Render terminal text naturally without glyph compression
 y_offset = TERMINAL_TOP + TERM_FONT_SIZE
 for row_type, key, val in lines_data:
     if row_type == "empty":
@@ -219,4 +220,4 @@ svg_template += "</svg>\n"
 with open("terminal.svg", "w", encoding="utf-8") as f:
     f.write(svg_template)
 
-print("terminal.svg generated without compression!")
+print(f"terminal.svg generated! Canvas: {SVG_WIDTH}x{SVG_HEIGHT}")
