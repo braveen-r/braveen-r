@@ -72,7 +72,12 @@ if github_token:
 # --- 3. ASCII LOAD ---
 try:
     with open("ascii-art.txt", "r", encoding="utf-8") as f:
-        ascii_art = f.read().splitlines()
+        # Strip trailing spaces on the right so width is measured from actual visible characters
+        raw_lines = [line.rstrip() for line in f.read().splitlines()]
+        # Also remove common empty left margin so there is no dead space on the left
+        non_empty = [line for line in raw_lines if line.strip()]
+        min_indent = min((len(line) - len(line.lstrip(" ")) for line in non_empty), default=0)
+        ascii_art = [line[min_indent:] for line in raw_lines]
 except FileNotFoundError:
     ascii_art = ["Error: ascii-art.txt not found."]
 
@@ -123,10 +128,11 @@ def terminal_row_text(row_type, key, val):
         return key_str + " " + "." * dots_len + " " + str(val)
     return ""
 
-# --- 5A. GENERATE DESKTOP SVG ---
-PADDING_X_D = 24
-PADDING_Y_D = 24
-GAP_D = -120
+# --- 5. GENERATE RESPONSIVE SVG ---
+PADDING_X = 30
+PADDING_Y = 30
+# Because trailing spaces are now stripped, 24px is the exact clean gap from the rightmost hair tip!
+GAP = 24
 
 ASCII_FONT_SIZE = 10
 ASCII_LINE_HEIGHT = 10
@@ -142,21 +148,18 @@ terminal_width = max((len(terminal_row_text(k, kv, v)) * TERM_CHAR_WIDTH for k, 
 ascii_height = max(len(ascii_art), 1) * ASCII_LINE_HEIGHT
 terminal_height = max(len(lines_data), 1) * TERM_LINE_HEIGHT
 
-CONTENT_WIDTH = ascii_width + GAP_D + terminal_width
+CONTENT_WIDTH = ascii_width + GAP + terminal_width
 CONTENT_HEIGHT = max(ascii_height, terminal_height)
 
-# Wrap tightly around content with zero wasted margin so it scales cleanly on all screens
-SVG_WIDTH_D = int(CONTENT_WIDTH + 2 * PADDING_X_D)
-SVG_HEIGHT_D = int(CONTENT_HEIGHT + 2 * PADDING_Y_D)
+SVG_WIDTH = int(CONTENT_WIDTH + 2 * PADDING_X)
+SVG_HEIGHT = int(CONTENT_HEIGHT + 2 * PADDING_Y)
 
-CONTENT_X = PADDING_X_D
-CONTENT_Y = PADDING_Y_D
-ASCII_X = CONTENT_X
-TERMINAL_X = ASCII_X + ascii_width + GAP_D
-ASCII_TOP = CONTENT_Y + (CONTENT_HEIGHT - ascii_height) / 2
-TERMINAL_TOP = CONTENT_Y + (CONTENT_HEIGHT - terminal_height) / 2
+ASCII_X = PADDING_X
+TERMINAL_X = ASCII_X + ascii_width + GAP
+ASCII_TOP = PADDING_Y + (CONTENT_HEIGHT - ascii_height) / 2
+TERMINAL_TOP = PADDING_Y + (CONTENT_HEIGHT - terminal_height) / 2
 
-desktop_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 {SVG_WIDTH_D} {SVG_HEIGHT_D}" preserveAspectRatio="xMidYMid meet">
+svg_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 {SVG_WIDTH} {SVG_HEIGHT}" preserveAspectRatio="xMidYMid meet">
     <style>
         .bg {{ fill: #0d1117; }}
         text {{ font-family: 'Courier New', Courier, monospace; }}
@@ -170,91 +173,59 @@ desktop_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="100%" heig
             .bg {{ fill: #f6f8fa; }}
             .val {{ fill: #0550ae; }}
             .dots {{ fill: #8c959f; }}
-            .ascii {{ fill: #b25012; }}
             .ascii {{ font-size: {ASCII_FONT_SIZE}px; fill: #212529; font-weight: bold; }}
         }}
     </style>
     <rect width="100%" height="100%" rx="10" class="bg"/>
 """
 
-desktop_template += f'<g transform="translate({ASCII_X:.2f},{ASCII_TOP + ASCII_FONT_SIZE:.2f})">\n'
+# Render ASCII art with exact textLength so Android/iOS fonts NEVER expand and overlap the text
+svg_template += f'<g transform="translate({ASCII_X:.2f},{ASCII_TOP + ASCII_FONT_SIZE:.2f})">\n'
 for i, line in enumerate(ascii_art):
-    desktop_template += f'<text x="0" y="{i * ASCII_LINE_HEIGHT}" class="ascii" xml:space="preserve">{xml_escape(line)}</text>\n'
-desktop_template += "</g>\n"
+    if line:
+        line_w = len(line) * ASCII_CHAR_WIDTH
+        svg_template += (
+            f'<text x="0" y="{i * ASCII_LINE_HEIGHT}" '
+            f'textLength="{line_w:.2f}" lengthAdjust="spacingAndGlyphs" '
+            f'class="ascii" xml:space="preserve">{xml_escape(line)}</text>\n'
+        )
+svg_template += "</g>\n"
 
+# Render terminal text with exact textLength so columns stay razor-sharp on mobile and desktop
 y_offset = TERMINAL_TOP + TERM_FONT_SIZE
 for row_type, key, val in lines_data:
     if row_type == "empty":
         y_offset += TERM_LINE_HEIGHT
         continue
+
+    full_row_str = terminal_row_text(row_type, key, val)
+    row_w = len(full_row_str) * TERM_CHAR_WIDTH
+
     if row_type == "header":
-        desktop_template += f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" class="term-text" xml:space="preserve"><tspan class="accent">{xml_escape(key)} </tspan><tspan class="dots">{xml_escape(val)}</tspan></text>\n'
+        svg_template += (
+            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
+            f'textLength="{row_w:.2f}" lengthAdjust="spacingAndGlyphs" '
+            f'class="term-text" xml:space="preserve">'
+            f'<tspan class="accent">{xml_escape(key)} </tspan>'
+            f'<tspan class="dots">{xml_escape(val)}</tspan></text>\n'
+        )
     elif row_type == "item":
         key_str = f". {key}:"
         dots_len = max(24 - len(key_str), 1)
         dots_str = " " + "." * dots_len + " "
-        desktop_template += f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" class="term-text" xml:space="preserve"><tspan class="accent">{xml_escape(key_str)}</tspan><tspan class="dots">{xml_escape(dots_str)}</tspan><tspan class="val">{xml_escape(val)}</tspan></text>\n'
+        svg_template += (
+            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
+            f'textLength="{row_w:.2f}" lengthAdjust="spacingAndGlyphs" '
+            f'class="term-text" xml:space="preserve">'
+            f'<tspan class="accent">{xml_escape(key_str)}</tspan>'
+            f'<tspan class="dots">{xml_escape(dots_str)}</tspan>'
+            f'<tspan class="val">{xml_escape(val)}</tspan></text>\n'
+        )
     y_offset += TERM_LINE_HEIGHT
-desktop_template += "</svg>\n"
+
+svg_template += "</svg>\n"
 
 with open("terminal.svg", "w", encoding="utf-8") as f:
-    f.write(desktop_template)
+    f.write(svg_template)
 
-
-# --- 5B. GENERATE MOBILE SVG (Stacked Layout) ---
-PADDING_X_M = 20
-SVG_WIDTH_M = int(max(ascii_width, terminal_width) + 2 * PADDING_X_M)
-ASCII_TOP_M = 30
-rendered_ascii_height = ascii_height
-TERMINAL_TOP_M = ASCII_TOP_M + rendered_ascii_height + 40
-SVG_HEIGHT_M = int(TERMINAL_TOP_M + terminal_height + 30)
-
-mobile_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 {SVG_WIDTH_M} {SVG_HEIGHT_M}" preserveAspectRatio="xMidYMid meet">
-    <style>
-        .bg {{ fill: #0d1117; }}
-        text {{ font-family: 'Courier New', Courier, monospace; }}
-        .ascii {{ font-size: {ASCII_FONT_SIZE}px; fill: #FFFFFF; font-weight: bold; }}
-        .term-text {{ font-size: {TERM_FONT_SIZE}px; }}
-        .accent {{ fill: #db904e; font-weight: bold; }}
-        .dots {{ fill: #484f58; }}
-        .val {{ fill: #9fcff8; }}
-
-        @media (prefers-color-scheme: light) {{
-            .bg {{ fill: #f6f8fa; }}
-            .val {{ fill: #0550ae; }}
-            .dots {{ fill: #8c959f; }}
-            .ascii {{ fill: #b25012; }}
-            .ascii {{ font-size: {ASCII_FONT_SIZE}px; fill: #212529; font-weight: bold; }}
-        }}
-    </style>
-    <rect width="100%" height="100%" rx="10" class="bg"/>
-"""
-
-# Center ASCII art horizontally on mobile
-ascii_x_m = max(PADDING_X_M, (SVG_WIDTH_M - ascii_width) / 2)
-
-mobile_template += f'<g transform="translate({ascii_x_m:.2f},{ASCII_TOP_M + ASCII_FONT_SIZE:.2f})">\n'
-for i, line in enumerate(ascii_art):
-    mobile_template += f'<text x="0" y="{i * ASCII_LINE_HEIGHT}" class="ascii" xml:space="preserve">{xml_escape(line)}</text>\n'
-mobile_template += "</g>\n"
-
-terminal_x_m = max(PADDING_X_M, (SVG_WIDTH_M - terminal_width) / 2)
-y_offset_m = TERMINAL_TOP_M + TERM_FONT_SIZE
-for row_type, key, val in lines_data:
-    if row_type == "empty":
-        y_offset_m += TERM_LINE_HEIGHT
-        continue
-    if row_type == "header":
-        mobile_template += f'<text x="{terminal_x_m:.2f}" y="{y_offset_m:.2f}" class="term-text" xml:space="preserve"><tspan class="accent">{xml_escape(key)} </tspan><tspan class="dots">{xml_escape(val)}</tspan></text>\n'
-    elif row_type == "item":
-        key_str = f". {key}:"
-        dots_len = max(24 - len(key_str), 1)
-        dots_str = " " + "." * dots_len + " "
-        mobile_template += f'<text x="{terminal_x_m:.2f}" y="{y_offset_m:.2f}" class="term-text" xml:space="preserve"><tspan class="accent">{xml_escape(key_str)}</tspan><tspan class="dots">{xml_escape(dots_str)}</tspan><tspan class="val">{xml_escape(val)}</tspan></text>\n'
-    y_offset_m += TERM_LINE_HEIGHT
-mobile_template += "</svg>\n"
-
-with open("terminal-mobile.svg", "w", encoding="utf-8") as f:
-    f.write(mobile_template)
-
-print("Both terminal.svg and terminal-mobile.svg generated successfully!")
+print("terminal.svg generated with locked mobile/desktop alignment!")
