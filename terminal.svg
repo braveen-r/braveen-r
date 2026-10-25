@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1135 755" preserveAspectRatio="xMidYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 980 629" preserveAspectRatio="xMidYMid meet">
     <style>
         .bg { fill: #0d1117; }
-        text { font-family: 'Consolas', 'DejaVu Sans Mono', 'Liberation Mono', 'Ubuntu Mono', 'Courier New', monospace; }
-        .ascii { font-size: 12px; fill: #FFFFFF; font-weight: bold; }
-        .term-text { font-size: 15.5px; }
+        text { font-family: 'Courier New', Courier, monospace; }
+        .ascii { font-size: 10px; fill: #FFFFFF; font-weight: bold; }
+        .term-text { font-size: 13px; }
         .accent { fill: #db904e; font-weight: bold; }
         .dots { fill: #484f58; }
         .val { fill: #9fcff8; }
@@ -12,92 +12,92 @@
             .bg { fill: #f6f8fa; }
             .val { fill: #0550ae; }
             .dots { fill: #8c959f; }
-            .ascii { font-size: 12px; fill: #212529; font-weight: bold; }
+            .ascii { font-size: 10px; fill: #212529; font-weight: bold; }
         }
     </style>
     <rect width="100%" height="100%" rx="10" class="bg"/>
-<g transform="translate(20.00,32.00)">
-<text x="0" y="13" class="ascii" xml:space="preserve">                            ++</text>
-<text x="0" y="26" class="ascii" xml:space="preserve">                            +++</text>
-<text x="0" y="39" class="ascii" xml:space="preserve">                           ++#++</text>
-<text x="0" y="52" class="ascii" xml:space="preserve">                           +###+                        ++++</text>
-<text x="0" y="65" class="ascii" xml:space="preserve">                         ++####+    +++++++++++++++++++++++</text>
-<text x="0" y="78" class="ascii" xml:space="preserve">                        ++####++++####################+++</text>
-<text x="0" y="91" class="ascii" xml:space="preserve">         ++++         +++#########################+++++</text>
-<text x="0" y="104" class="ascii" xml:space="preserve">         ++###+++++++++################################+++++</text>
-<text x="0" y="117" class="ascii" xml:space="preserve">          +++################################################+++++++</text>
-<text x="0" y="130" class="ascii" xml:space="preserve">            ++++++################################################++</text>
-<text x="0" y="143" class="ascii" xml:space="preserve">            +++############################################+++++++</text>
-<text x="0" y="156" class="ascii" xml:space="preserve">            ++############################################+</text>
-<text x="0" y="169" class="ascii" xml:space="preserve">          ++++#############################################++</text>
-<text x="0" y="182" class="ascii" xml:space="preserve">         ++++###############################################++</text>
-<text x="0" y="195" class="ascii" xml:space="preserve">      ++++###################################++######+########++</text>
-<text x="0" y="208" class="ascii" xml:space="preserve"> ++++++#######################################++######+########++</text>
-<text x="0" y="221" class="ascii" xml:space="preserve">++######################################+######++#####+##########++</text>
-<text x="0" y="234" class="ascii" xml:space="preserve">    ++++++##############################+######+++#####+##########+++</text>
-<text x="0" y="247" class="ascii" xml:space="preserve">       ++###############################+###+---++----##+###########++</text>
-<text x="0" y="260" class="ascii" xml:space="preserve">      ++#######################+########+#+.++++++++++-+++####+++#####++</text>
-<text x="0" y="273" class="ascii" xml:space="preserve">     ++########################+########++-++++++++++---+++###++</text>
-<text x="0" y="286" class="ascii" xml:space="preserve">    ++##########################+#######+-++++++++++-----#++###++</text>
-<text x="0" y="299" class="ascii" xml:space="preserve">   ++####+############+########+##+####++-++++++++-------##+++##++</text>
-<text x="0" y="312" class="ascii" xml:space="preserve"> +++++++++#############+#####+#+##+####+--++++++---------##-   +++++</text>
-<text x="0" y="325" class="ascii" xml:space="preserve">         +#############++####+++##+###++#-+++++----------#+-</text>
-<text x="0" y="338" class="ascii" xml:space="preserve">        ++###########---+####++##++##++##--++------------##-</text>
-<text x="0" y="351" class="ascii" xml:space="preserve">        ++#++######+-####+###++##++#++####+------------####+--</text>
-<text x="0" y="364" class="ascii" xml:space="preserve">        ++++++#####-######++#++++#+++########----..-+########-.</text>
-<text x="0" y="377" class="ascii" xml:space="preserve">       +++   +####-+########+++###+###########################-</text>
-<text x="0" y="390" class="ascii" xml:space="preserve">       +      +####-##########################################-</text>
-<text x="0" y="403" class="ascii" xml:space="preserve">              +#+++--########################################+.</text>
-<text x="0" y="416" class="ascii" xml:space="preserve">              ++++++#---+#####################+-+###########--</text>
-<text x="0" y="429" class="ascii" xml:space="preserve">               ++  +++++#++-####################+--#######..-</text>
-<text x="0" y="442" class="ascii" xml:space="preserve">                     ++++++#-######################---...-</text>
-<text x="0" y="455" class="ascii" xml:space="preserve">                        ++++####################-----</text>
-<text x="0" y="468" class="ascii" xml:space="preserve">                       .----------------------------</text>
-<text x="0" y="481" class="ascii" xml:space="preserve">                       --+++++++---------------------</text>
-<text x="0" y="494" class="ascii" xml:space="preserve">                       -++---------------------------</text>
-<text x="0" y="507" class="ascii" xml:space="preserve">                       -+---------------------------</text>
-<text x="0" y="520" class="ascii" xml:space="preserve">                       -+---------------------------</text>
-<text x="0" y="533" class="ascii" xml:space="preserve">                       -----------------------------</text>
-<text x="0" y="546" class="ascii" xml:space="preserve">                       -----------------------------</text>
-<text x="0" y="559" class="ascii" xml:space="preserve">                         ..--------------------</text>
-<text x="0" y="572" class="ascii" xml:space="preserve">                         -----------------------</text>
-<text x="0" y="585" class="ascii" xml:space="preserve">                        -------------------------</text>
-<text x="0" y="598" class="ascii" xml:space="preserve">                        .-----+++----------------</text>
-<text x="0" y="611" class="ascii" xml:space="preserve">                       -----+++++++---------------</text>
-<text x="0" y="624" class="ascii" xml:space="preserve">                       .---+++++++++---------------</text>
-<text x="0" y="637" class="ascii" xml:space="preserve">                      ------+++++++++--------------</text>
-<text x="0" y="650" class="ascii" xml:space="preserve">                      ---------------+--------------</text>
-<text x="0" y="663" class="ascii" xml:space="preserve">                     --------------------------------</text>
-<text x="0" y="676" class="ascii" xml:space="preserve">                     --------------------------------</text>
-<text x="0" y="689" class="ascii" xml:space="preserve">                    ----------------------------------</text>
-<text x="0" y="702" class="ascii" xml:space="preserve">                    ----------------------------------</text>
+<g transform="translate(12.00,22.00)">
+<text x="0" y="11" class="ascii" xml:space="preserve">                            ++</text>
+<text x="0" y="22" class="ascii" xml:space="preserve">                            +++</text>
+<text x="0" y="33" class="ascii" xml:space="preserve">                           ++#++</text>
+<text x="0" y="44" class="ascii" xml:space="preserve">                           +###+                        ++++</text>
+<text x="0" y="55" class="ascii" xml:space="preserve">                         ++####+    +++++++++++++++++++++++</text>
+<text x="0" y="66" class="ascii" xml:space="preserve">                        ++####++++####################+++</text>
+<text x="0" y="77" class="ascii" xml:space="preserve">         ++++         +++#########################+++++</text>
+<text x="0" y="88" class="ascii" xml:space="preserve">         ++###+++++++++################################+++++</text>
+<text x="0" y="99" class="ascii" xml:space="preserve">          +++################################################+++++++</text>
+<text x="0" y="110" class="ascii" xml:space="preserve">            ++++++################################################++</text>
+<text x="0" y="121" class="ascii" xml:space="preserve">            +++############################################+++++++</text>
+<text x="0" y="132" class="ascii" xml:space="preserve">            ++############################################+</text>
+<text x="0" y="143" class="ascii" xml:space="preserve">          ++++#############################################++</text>
+<text x="0" y="154" class="ascii" xml:space="preserve">         ++++###############################################++</text>
+<text x="0" y="165" class="ascii" xml:space="preserve">      ++++###################################++######+########++</text>
+<text x="0" y="176" class="ascii" xml:space="preserve"> ++++++#######################################++######+########++</text>
+<text x="0" y="187" class="ascii" xml:space="preserve">++######################################+######++#####+##########++</text>
+<text x="0" y="198" class="ascii" xml:space="preserve">    ++++++##############################+######+++#####+##########+++</text>
+<text x="0" y="209" class="ascii" xml:space="preserve">       ++###############################+###+---++----##+###########++</text>
+<text x="0" y="220" class="ascii" xml:space="preserve">      ++#######################+########+#+.++++++++++-+++####+++#####++</text>
+<text x="0" y="231" class="ascii" xml:space="preserve">     ++########################+########++-++++++++++---+++###++</text>
+<text x="0" y="242" class="ascii" xml:space="preserve">    ++##########################+#######+-++++++++++-----#++###++</text>
+<text x="0" y="253" class="ascii" xml:space="preserve">   ++####+############+########+##+####++-++++++++-------##+++##++</text>
+<text x="0" y="264" class="ascii" xml:space="preserve"> +++++++++#############+#####+#+##+####+--++++++---------##-   +++++</text>
+<text x="0" y="275" class="ascii" xml:space="preserve">         +#############++####+++##+###++#-+++++----------#+-</text>
+<text x="0" y="286" class="ascii" xml:space="preserve">        ++###########---+####++##++##++##--++------------##-</text>
+<text x="0" y="297" class="ascii" xml:space="preserve">        ++#++######+-####+###++##++#++####+------------####+--</text>
+<text x="0" y="308" class="ascii" xml:space="preserve">        ++++++#####-######++#++++#+++########----..-+########-.</text>
+<text x="0" y="319" class="ascii" xml:space="preserve">       +++   +####-+########+++###+###########################-</text>
+<text x="0" y="330" class="ascii" xml:space="preserve">       +      +####-##########################################-</text>
+<text x="0" y="341" class="ascii" xml:space="preserve">              +#+++--########################################+.</text>
+<text x="0" y="352" class="ascii" xml:space="preserve">              ++++++#---+#####################+-+###########--</text>
+<text x="0" y="363" class="ascii" xml:space="preserve">               ++  +++++#++-####################+--#######..-</text>
+<text x="0" y="374" class="ascii" xml:space="preserve">                     ++++++#-######################---...-</text>
+<text x="0" y="385" class="ascii" xml:space="preserve">                        ++++####################-----</text>
+<text x="0" y="396" class="ascii" xml:space="preserve">                       .----------------------------</text>
+<text x="0" y="407" class="ascii" xml:space="preserve">                       --+++++++---------------------</text>
+<text x="0" y="418" class="ascii" xml:space="preserve">                       -++---------------------------</text>
+<text x="0" y="429" class="ascii" xml:space="preserve">                       -+---------------------------</text>
+<text x="0" y="440" class="ascii" xml:space="preserve">                       -+---------------------------</text>
+<text x="0" y="451" class="ascii" xml:space="preserve">                       -----------------------------</text>
+<text x="0" y="462" class="ascii" xml:space="preserve">                       -----------------------------</text>
+<text x="0" y="473" class="ascii" xml:space="preserve">                         ..--------------------</text>
+<text x="0" y="484" class="ascii" xml:space="preserve">                         -----------------------</text>
+<text x="0" y="495" class="ascii" xml:space="preserve">                        -------------------------</text>
+<text x="0" y="506" class="ascii" xml:space="preserve">                        .-----+++----------------</text>
+<text x="0" y="517" class="ascii" xml:space="preserve">                       -----+++++++---------------</text>
+<text x="0" y="528" class="ascii" xml:space="preserve">                       .---+++++++++---------------</text>
+<text x="0" y="539" class="ascii" xml:space="preserve">                      ------+++++++++--------------</text>
+<text x="0" y="550" class="ascii" xml:space="preserve">                      ---------------+--------------</text>
+<text x="0" y="561" class="ascii" xml:space="preserve">                     --------------------------------</text>
+<text x="0" y="572" class="ascii" xml:space="preserve">                     --------------------------------</text>
+<text x="0" y="583" class="ascii" xml:space="preserve">                    ----------------------------------</text>
+<text x="0" y="594" class="ascii" xml:space="preserve">                    ----------------------------------</text>
 </g>
-<text x="566.40" y="52.00" class="term-text" xml:space="preserve"><tspan class="accent">sunraku@archlinux </tspan><tspan class="dots">-----------------------------------------</tspan></text>
-<text x="566.40" y="74.00" class="term-text" xml:space="preserve"><tspan class="accent">. OS:</tspan><tspan class="dots"> ................... </tspan><tspan class="val">Arch Linux, Windows 11, Android</tspan></text>
-<text x="566.40" y="96.00" class="term-text" xml:space="preserve"><tspan class="accent">. Player.Active:</tspan><tspan class="dots"> ........ </tspan><tspan class="val">19 years, 356 days (Level 19)</tspan></text>
-<text x="566.40" y="118.00" class="term-text" xml:space="preserve"><tspan class="accent">. Role:</tspan><tspan class="dots"> ................. </tspan><tspan class="val">Cloud &amp; DevOps Eng.</tspan></text>
-<text x="566.40" y="140.00" class="term-text" xml:space="preserve"><tspan class="accent">. Desktop:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">Hyprland, Win Explorer</tspan></text>
-<text x="566.40" y="162.00" class="term-text" xml:space="preserve"><tspan class="accent">. Shell:</tspan><tspan class="dots"> ................ </tspan><tspan class="val">zsh, PowerShell</tspan></text>
-<text x="566.40" y="184.00" class="term-text" xml:space="preserve"><tspan class="accent">. IDE:</tspan><tspan class="dots"> .................. </tspan><tspan class="val">Neovim, VS Code, Cursor</tspan></text>
-<text x="566.40" y="206.00" class="term-text" xml:space="preserve"><tspan class="accent">. Battery:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">[ CHARGING ] 100%</tspan></text>
-<text x="566.40" y="228.00" class="term-text" xml:space="preserve"><tspan class="accent">. Fuel:</tspan><tspan class="dots"> ................. </tspan><tspan class="val">Coffee</tspan></text>
-<text x="566.40" y="250.00" class="term-text" xml:space="preserve"><tspan class="accent">. Audio:</tspan><tspan class="dots"> ................ </tspan><tspan class="val">The Life of Ram | Govind Vasantha</tspan></text>
-<text x="566.40" y="294.00" class="term-text" xml:space="preserve"><tspan class="accent">. Languages.Core:</tspan><tspan class="dots"> ....... </tspan><tspan class="val">JavaScript, Python, Bash, C</tspan></text>
-<text x="566.40" y="316.00" class="term-text" xml:space="preserve"><tspan class="accent">. Languages.Web:</tspan><tspan class="dots"> ........ </tspan><tspan class="val">HTML, Tailwind, React, Node</tspan></text>
-<text x="566.40" y="338.00" class="term-text" xml:space="preserve"><tspan class="accent">. Languages.Real:</tspan><tspan class="dots"> ....... </tspan><tspan class="val">English, Tamil, Malayalam</tspan></text>
-<text x="566.40" y="360.00" class="term-text" xml:space="preserve"><tspan class="accent">. DevOps and DB:</tspan><tspan class="dots"> ........ </tspan><tspan class="val">Docker, Actions, Vercel, DuckDB</tspan></text>
-<text x="566.40" y="382.00" class="term-text" xml:space="preserve"><tspan class="accent">. Hardware:</tspan><tspan class="dots"> ............. </tspan><tspan class="val">ASUS Vivobook (AMD Ryzen 3)</tspan></text>
-<text x="566.40" y="404.00" class="term-text" xml:space="preserve"><tspan class="accent">. Hobbies:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">System Ricing, Action RPGs, Anime</tspan></text>
-<text x="566.40" y="448.00" class="term-text" xml:space="preserve"><tspan class="accent">Contact </tspan><tspan class="dots">-------------------------------------------------</tspan></text>
-<text x="566.40" y="470.00" class="term-text" xml:space="preserve"><tspan class="accent">. Portfolio:</tspan><tspan class="dots"> ............ </tspan><tspan class="val">portfolio-weld-rho-75.vercel.app</tspan></text>
-<text x="566.40" y="492.00" class="term-text" xml:space="preserve"><tspan class="accent">. Email:</tspan><tspan class="dots"> ................ </tspan><tspan class="val">braveenrprogrammer811@gmail.com</tspan></text>
-<text x="566.40" y="514.00" class="term-text" xml:space="preserve"><tspan class="accent">. LinkedIn:</tspan><tspan class="dots"> ............. </tspan><tspan class="val">Braveen R</tspan></text>
-<text x="566.40" y="536.00" class="term-text" xml:space="preserve"><tspan class="accent">. X (Twitter):</tspan><tspan class="dots"> .......... </tspan><tspan class="val">@braveenruban</tspan></text>
-<text x="566.40" y="558.00" class="term-text" xml:space="preserve"><tspan class="accent">. Instagram:</tspan><tspan class="dots"> ............ </tspan><tspan class="val">braveen_r</tspan></text>
-<text x="566.40" y="580.00" class="term-text" xml:space="preserve"><tspan class="accent">. Discord:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">itz_sunraku</tspan></text>
-<text x="566.40" y="602.00" class="term-text" xml:space="preserve"><tspan class="accent">. Location:</tspan><tspan class="dots"> ............. </tspan><tspan class="val">Bangalore (Study) | Kerala (Home)</tspan></text>
-<text x="566.40" y="646.00" class="term-text" xml:space="preserve"><tspan class="accent">GitHub Stats </tspan><tspan class="dots">------------------------------------------</tspan></text>
-<text x="566.40" y="668.00" class="term-text" xml:space="preserve"><tspan class="accent">. Repos:</tspan><tspan class="dots"> ................ </tspan><tspan class="val">10 | Stars: 0</tspan></text>
-<text x="566.40" y="690.00" class="term-text" xml:space="preserve"><tspan class="accent">. Commits:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">92 | Followers: 1</tspan></text>
-<text x="566.40" y="712.00" class="term-text" xml:space="preserve"><tspan class="accent">. Lines of Code:</tspan><tspan class="dots"> ........ </tspan><tspan class="val">11500++</tspan></text>
+<text x="485.60" y="33.00" class="term-text" xml:space="preserve"><tspan class="accent">sunraku@archlinux </tspan><tspan class="dots">-----------------------------------------</tspan></text>
+<text x="485.60" y="52.00" class="term-text" xml:space="preserve"><tspan class="accent">. OS:</tspan><tspan class="dots"> ................... </tspan><tspan class="val">Arch Linux, Windows 11, Android</tspan></text>
+<text x="485.60" y="71.00" class="term-text" xml:space="preserve"><tspan class="accent">. Player.Active:</tspan><tspan class="dots"> ........ </tspan><tspan class="val">19 years, 356 days (Level 19)</tspan></text>
+<text x="485.60" y="90.00" class="term-text" xml:space="preserve"><tspan class="accent">. Role:</tspan><tspan class="dots"> ................. </tspan><tspan class="val">Cloud &amp; DevOps Eng.</tspan></text>
+<text x="485.60" y="109.00" class="term-text" xml:space="preserve"><tspan class="accent">. Desktop:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">Hyprland, Win Explorer</tspan></text>
+<text x="485.60" y="128.00" class="term-text" xml:space="preserve"><tspan class="accent">. Shell:</tspan><tspan class="dots"> ................ </tspan><tspan class="val">zsh, PowerShell</tspan></text>
+<text x="485.60" y="147.00" class="term-text" xml:space="preserve"><tspan class="accent">. IDE:</tspan><tspan class="dots"> .................. </tspan><tspan class="val">Neovim, VS Code, Cursor</tspan></text>
+<text x="485.60" y="166.00" class="term-text" xml:space="preserve"><tspan class="accent">. Battery:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">[ CHARGING ] 100%</tspan></text>
+<text x="485.60" y="185.00" class="term-text" xml:space="preserve"><tspan class="accent">. Fuel:</tspan><tspan class="dots"> ................. </tspan><tspan class="val">Coffee</tspan></text>
+<text x="485.60" y="204.00" class="term-text" xml:space="preserve"><tspan class="accent">. Audio:</tspan><tspan class="dots"> ................ </tspan><tspan class="val">The Life of Ram | Govind Vasantha</tspan></text>
+<text x="485.60" y="242.00" class="term-text" xml:space="preserve"><tspan class="accent">. Languages.Core:</tspan><tspan class="dots"> ....... </tspan><tspan class="val">JavaScript, Python, Bash, C</tspan></text>
+<text x="485.60" y="261.00" class="term-text" xml:space="preserve"><tspan class="accent">. Languages.Web:</tspan><tspan class="dots"> ........ </tspan><tspan class="val">HTML, Tailwind, React, Node</tspan></text>
+<text x="485.60" y="280.00" class="term-text" xml:space="preserve"><tspan class="accent">. Languages.Real:</tspan><tspan class="dots"> ....... </tspan><tspan class="val">English, Tamil, Malayalam</tspan></text>
+<text x="485.60" y="299.00" class="term-text" xml:space="preserve"><tspan class="accent">. DevOps and DB:</tspan><tspan class="dots"> ........ </tspan><tspan class="val">Docker, Actions, Vercel, DuckDB</tspan></text>
+<text x="485.60" y="318.00" class="term-text" xml:space="preserve"><tspan class="accent">. Hardware:</tspan><tspan class="dots"> ............. </tspan><tspan class="val">ASUS Vivobook (AMD Ryzen 3)</tspan></text>
+<text x="485.60" y="337.00" class="term-text" xml:space="preserve"><tspan class="accent">. Hobbies:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">System Ricing, Action RPGs, Anime</tspan></text>
+<text x="485.60" y="375.00" class="term-text" xml:space="preserve"><tspan class="accent">Contact </tspan><tspan class="dots">-------------------------------------------------</tspan></text>
+<text x="485.60" y="394.00" class="term-text" xml:space="preserve"><tspan class="accent">. Portfolio:</tspan><tspan class="dots"> ............ </tspan><tspan class="val">portfolio-weld-rho-75.vercel.app</tspan></text>
+<text x="485.60" y="413.00" class="term-text" xml:space="preserve"><tspan class="accent">. Email:</tspan><tspan class="dots"> ................ </tspan><tspan class="val">braveenrprogrammer811@gmail.com</tspan></text>
+<text x="485.60" y="432.00" class="term-text" xml:space="preserve"><tspan class="accent">. LinkedIn:</tspan><tspan class="dots"> ............. </tspan><tspan class="val">Braveen R</tspan></text>
+<text x="485.60" y="451.00" class="term-text" xml:space="preserve"><tspan class="accent">. X (Twitter):</tspan><tspan class="dots"> .......... </tspan><tspan class="val">@braveenruban</tspan></text>
+<text x="485.60" y="470.00" class="term-text" xml:space="preserve"><tspan class="accent">. Instagram:</tspan><tspan class="dots"> ............ </tspan><tspan class="val">braveen_r</tspan></text>
+<text x="485.60" y="489.00" class="term-text" xml:space="preserve"><tspan class="accent">. Discord:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">itz_sunraku</tspan></text>
+<text x="485.60" y="508.00" class="term-text" xml:space="preserve"><tspan class="accent">. Location:</tspan><tspan class="dots"> ............. </tspan><tspan class="val">Bangalore (Study) | Kerala (Home)</tspan></text>
+<text x="485.60" y="546.00" class="term-text" xml:space="preserve"><tspan class="accent">GitHub Stats </tspan><tspan class="dots">------------------------------------------</tspan></text>
+<text x="485.60" y="565.00" class="term-text" xml:space="preserve"><tspan class="accent">. Repos:</tspan><tspan class="dots"> ................ </tspan><tspan class="val">10 | Stars: 0</tspan></text>
+<text x="485.60" y="584.00" class="term-text" xml:space="preserve"><tspan class="accent">. Commits:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">93 | Followers: 1</tspan></text>
+<text x="485.60" y="603.00" class="term-text" xml:space="preserve"><tspan class="accent">. Lines of Code:</tspan><tspan class="dots"> ........ </tspan><tspan class="val">11625++</tspan></text>
 </svg>
