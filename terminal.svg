@@ -7,6 +7,8 @@
         .accent { fill: #db904e; font-weight: bold; }
         .dots { fill: #484f58; }
         .val { fill: #9fcff8; }
+        .add { fill: #3fb950; }
+        .del { fill: #f85149; }
 
         @media (prefers-color-scheme: light) {
             .bg { fill: #f6f8fa; }
@@ -97,7 +99,7 @@
 <text x="515.60" y="507.00" class="term-text" xml:space="preserve"><tspan class="accent">. Discord:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">itz_sunraku</tspan></text>
 <text x="515.60" y="526.00" class="term-text" xml:space="preserve"><tspan class="accent">. Location:</tspan><tspan class="dots"> ............. </tspan><tspan class="val">Bangalore (Study) | Kerala (Home)</tspan></text>
 <text x="515.60" y="564.00" class="term-text" xml:space="preserve"><tspan class="accent">GitHub Stats </tspan><tspan class="dots">------------------------------------------</tspan></text>
-<text x="515.60" y="583.00" class="term-text" xml:space="preserve"><tspan class="accent">. Repos:</tspan><tspan class="dots"> ................ </tspan><tspan class="val">10 | Stars: 0</tspan></text>
-<text x="515.60" y="602.00" class="term-text" xml:space="preserve"><tspan class="accent">. Commits:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">100 | Followers: 3</tspan></text>
-<text x="515.60" y="621.00" class="term-text" xml:space="preserve"><tspan class="accent">. Lines of Code:</tspan><tspan class="dots"> ........ </tspan><tspan class="val">12500++</tspan></text>
+<text x="515.60" y="583.00" class="term-text" xml:space="preserve"><tspan class="accent">. Repos: </tspan><tspan class="val">0 {Contributed: 0}</tspan><tspan class="dots"> | </tspan><tspan class="accent">Stars: </tspan><tspan class="val">0</tspan></text>
+<text x="515.60" y="602.00" class="term-text" xml:space="preserve"><tspan class="accent">. Commmits: </tspan><tspan class="val">0</tspan><tspan class="dots"> | </tspan><tspan class="accent">Followers: </tspan><tspan class="val">0</tspan></text>
+<text x="515.60" y="621.00" class="term-text" xml:space="preserve"><tspan class="accent">. Lines of Code on GitHub: </tspan><tspan class="val">0</tspan><tspan class="dots"> ( </tspan><tspan class="add">0++</tspan><tspan class="dots">, </tspan><tspan class="del">0--</tspan><tspan class="dots"> )</tspan></text>
 </svg>

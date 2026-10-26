@@ -23,11 +23,11 @@ else: battery = "[ CHARGING ] 100%"
 
 # --- 2. GITHUB API FETCH ---
 github_token = os.getenv("README_STATS_TOKEN")
-repos_count = "..."
-stars_count = "..."
-commits_count = "..."
-followers_count = "..."
-loc_total = "..."
+repos_count = 0
+contributed_count = 0
+stars_count = 0
+commits_count = 0
+followers_count = 0
 
 if github_token:
     headers = {
@@ -41,6 +41,9 @@ if github_token:
         repositories(first: 100, ownerAffiliations: OWNER, privacy: PUBLIC) {
           totalCount
           nodes { stargazerCount }
+        }
+        repositoriesContributedTo(first: 1, contributionTypes: [COMMIT, ISSUE, PULL_REQUEST, REPOSITORY]) {
+          totalCount
         }
         followers { totalCount }
         contributionsCollection {
@@ -62,12 +65,26 @@ if github_token:
             raise RuntimeError("; ".join(error.get("message", "GraphQL error") for error in result["errors"]))
         data = result["data"]["viewer"]
         repos_count = data["repositories"]["totalCount"]
+        contributed_count = data["repositoriesContributedTo"]["totalCount"]
         followers_count = data["followers"]["totalCount"]
         stars_count = sum(repo["stargazerCount"] for repo in data["repositories"]["nodes"])
         commits_count = data["contributionsCollection"]["contributionCalendar"]["totalContributions"]
-        loc_total = f"{commits_count * 125}++"
     except Exception as e:
         print(f"API Error: {e}")
+
+# Formatted strings with commas
+repos_str = f"{repos_count}"
+contrib_str = f"{contributed_count}"
+stars_str = f"{stars_count:,}"
+commits_str = f"{commits_count:,}"
+followers_str = f"{followers_count:,}"
+
+loc_adds = commits_count * 125
+loc_dels = int(commits_count * 18)
+loc_total = loc_adds - loc_dels
+loc_total_str = f"{loc_total:,}"
+loc_adds_str = f"{loc_adds:,}++"
+loc_dels_str = f"{loc_dels:,}--"
 
 # --- 3. ASCII LOAD ---
 try:
@@ -109,9 +126,9 @@ lines_data = [
     ("item", "Location", "Bangalore (Study) | Kerala (Home)"),
     ("empty", "", ""),
     ("header", "GitHub Stats", "------------------------------------------"),
-    ("item", "Repos", f"{repos_count} | Stars: {stars_count}"),
-    ("item", "Commits", f"{commits_count} | Followers: {followers_count}"),
-    ("item", "Lines of Code", loc_total),
+    ("stat_repos", f"{repos_str} {{Contributed: {contrib_str}}}", f"Stars: {stars_str}"),
+    ("stat_commits", f"{commits_str}", f"Followers: {followers_str}"),
+    ("stat_loc", f"{loc_total_str}", f"( {loc_adds_str}, {loc_dels_str} )"),
 ]
 
 def xml_escape(value):
@@ -124,9 +141,15 @@ def terminal_row_text(row_type, key, val):
         key_str = f". {key}:"
         dots_len = max(24 - len(key_str), 1)
         return key_str + " " + "." * dots_len + " " + str(val)
+    if row_type == "stat_repos":
+        return f". Repos: {key} | Stars: {val}"
+    if row_type == "stat_commits":
+        return f". Commmits: {key} | Followers: {val}"
+    if row_type == "stat_loc":
+        return f". Lines of Code on GitHub: {key} {val}"
     return ""
 
-# --- 5. GENERATE RESPONSIVE SVG ---
+# --- 5. GENERATE SVG ---
 PADDING_X = 30
 PADDING_Y = 30
 GAP = 32
@@ -136,7 +159,6 @@ ASCII_LINE_HEIGHT = 11
 TERM_FONT_SIZE = 13
 TERM_LINE_HEIGHT = 19
 
-# Natural character width allowance so mobile and desktop fonts never feel squished
 ASCII_CHAR_WIDTH = ASCII_FONT_SIZE * 0.63
 TERM_CHAR_WIDTH = TERM_FONT_SIZE * 0.63
 
@@ -166,6 +188,8 @@ svg_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{SVG_WIDTH}" h
         .accent {{ fill: #db904e; font-weight: bold; }}
         .dots {{ fill: #484f58; }}
         .val {{ fill: #9fcff8; }}
+        .add {{ fill: #3fb950; }}
+        .del {{ fill: #f85149; }}
 
         @media (prefers-color-scheme: light) {{
             .bg {{ fill: #f6f8fa; }}
@@ -177,7 +201,6 @@ svg_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{SVG_WIDTH}" h
     <rect width="100%" height="100%" rx="10" class="bg"/>
 """
 
-# Render ASCII art naturally without glyph compression
 svg_template += f'<g transform="translate({ASCII_X:.2f},{ASCII_TOP + ASCII_FONT_SIZE:.2f})">\n'
 for i, line in enumerate(ascii_art):
     if line:
@@ -187,7 +210,6 @@ for i, line in enumerate(ascii_art):
         )
 svg_template += "</g>\n"
 
-# Render terminal text naturally without glyph compression
 y_offset = TERMINAL_TOP + TERM_FONT_SIZE
 for row_type, key, val in lines_data:
     if row_type == "empty":
@@ -212,6 +234,41 @@ for row_type, key, val in lines_data:
             f'<tspan class="dots">{xml_escape(dots_str)}</tspan>'
             f'<tspan class="val">{xml_escape(val)}</tspan></text>\n'
         )
+    elif row_type == "stat_repos":
+        svg_template += (
+            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
+            f'class="term-text" xml:space="preserve">'
+            f'<tspan class="accent">. Repos: </tspan>'
+            f'<tspan class="val">{xml_escape(key)}</tspan>'
+            f'<tspan class="dots"> | </tspan>'
+            f'<tspan class="accent">Stars: </tspan>'
+            f'<tspan class="val">{xml_escape(val.replace("Stars: ", ""))}</tspan></text>\n'
+        )
+    elif row_type == "stat_commits":
+        svg_template += (
+            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
+            f'class="term-text" xml:space="preserve">'
+            f'<tspan class="accent">. Commmits: </tspan>'
+            f'<tspan class="val">{xml_escape(key)}</tspan>'
+            f'<tspan class="dots"> | </tspan>'
+            f'<tspan class="accent">Followers: </tspan>'
+            f'<tspan class="val">{xml_escape(val.replace("Followers: ", ""))}</tspan></text>\n'
+        )
+    elif row_type == "stat_loc":
+        parts = val.split(", ")
+        adds = parts[0].replace("( ", "")
+        dels = parts[1].replace(" )", "")
+        svg_template += (
+            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
+            f'class="term-text" xml:space="preserve">'
+            f'<tspan class="accent">. Lines of Code on GitHub: </tspan>'
+            f'<tspan class="val">{xml_escape(key)}</tspan>'
+            f'<tspan class="dots"> ( </tspan>'
+            f'<tspan class="add">{xml_escape(adds)}</tspan>'
+            f'<tspan class="dots">, </tspan>'
+            f'<tspan class="del">{xml_escape(dels)}</tspan>'
+            f'<tspan class="dots"> )</tspan></text>\n'
+        )
     y_offset += TERM_LINE_HEIGHT
 
 svg_template += "</svg>\n"
@@ -219,4 +276,4 @@ svg_template += "</svg>\n"
 with open("terminal.svg", "w", encoding="utf-8") as f:
     f.write(svg_template)
 
-print("terminal.svg successfully generated!")
+print("terminal.svg generated with full stats breakdown!")
