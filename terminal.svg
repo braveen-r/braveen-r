@@ -74,12 +74,12 @@
 </g>
 <text x="515.60" y="51.00" class="term-text" xml:space="preserve"><tspan class="accent">sunraku@archlinux </tspan><tspan class="dots">-----------------------------------------</tspan></text>
 <text x="515.60" y="70.00" class="term-text" xml:space="preserve"><tspan class="accent">. OS:</tspan><tspan class="dots"> ................... </tspan><tspan class="val">Arch Linux, Windows 11, Android</tspan></text>
-<text x="515.60" y="89.00" class="term-text" xml:space="preserve"><tspan class="accent">. Player.Active:</tspan><tspan class="dots"> ........ </tspan><tspan class="val">19 years, 355 days (Level 19)</tspan></text>
+<text x="515.60" y="89.00" class="term-text" xml:space="preserve"><tspan class="accent">. Player.Active:</tspan><tspan class="dots"> ........ </tspan><tspan class="val">19 years, 356 days (Level 19)</tspan></text>
 <text x="515.60" y="108.00" class="term-text" xml:space="preserve"><tspan class="accent">. Role:</tspan><tspan class="dots"> ................. </tspan><tspan class="val">Cloud &amp; DevOps Eng.</tspan></text>
 <text x="515.60" y="127.00" class="term-text" xml:space="preserve"><tspan class="accent">. Desktop:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">Hyprland, Win Explorer</tspan></text>
 <text x="515.60" y="146.00" class="term-text" xml:space="preserve"><tspan class="accent">. Shell:</tspan><tspan class="dots"> ................ </tspan><tspan class="val">zsh, PowerShell</tspan></text>
 <text x="515.60" y="165.00" class="term-text" xml:space="preserve"><tspan class="accent">. IDE:</tspan><tspan class="dots"> .................. </tspan><tspan class="val">Neovim, VS Code, Cursor</tspan></text>
-<text x="515.60" y="184.00" class="term-text" xml:space="preserve"><tspan class="accent">. Battery:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">[ CHARGING ] 100%</tspan></text>
+<text x="515.60" y="184.00" class="term-text" xml:space="preserve"><tspan class="accent">. Battery:</tspan><tspan class="dots"> .............. </tspan><tspan class="val">[██████████] 100%</tspan></text>
 <text x="515.60" y="203.00" class="term-text" xml:space="preserve"><tspan class="accent">. Fuel:</tspan><tspan class="dots"> ................. </tspan><tspan class="val">Coffee</tspan></text>
 <text x="515.60" y="222.00" class="term-text" xml:space="preserve"><tspan class="accent">. Audio:</tspan><tspan class="dots"> ................ </tspan><tspan class="val">The Life of Ram | Govind Vasantha</tspan></text>
 <text x="515.60" y="260.00" class="term-text" xml:space="preserve"><tspan class="accent">. Languages.Core:</tspan><tspan class="dots"> ....... </tspan><tspan class="val">JavaScript, Python, Bash, C</tspan></text>
