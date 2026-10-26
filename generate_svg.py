@@ -157,7 +157,7 @@ TERMINAL_X = ASCII_X + ascii_width + GAP
 ASCII_TOP = PADDING_Y + (CONTENT_HEIGHT - ascii_height) / 2
 TERMINAL_TOP = PADDING_Y + (CONTENT_HEIGHT - terminal_height) / 2
 
-svg_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 {SVG_WIDTH} {SVG_HEIGHT}" preserveAspectRatio="xMidYMid meet">
+svg_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{SVG_WIDTH}" height="{SVG_HEIGHT}" viewBox="0 0 {SVG_WIDTH} {SVG_HEIGHT}" preserveAspectRatio="xMidYMid meet">
     <style>
         .bg {{ fill: #0d1117; }}
         text {{ font-family: 'Courier New', Courier, monospace; }}
@@ -219,4 +219,4 @@ svg_template += "</svg>\n"
 with open("terminal.svg", "w", encoding="utf-8") as f:
     f.write(svg_template)
 
-print("terminal.svg generated without compression!")
+print("terminal.svg successfully generated!")
