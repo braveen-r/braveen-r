@@ -230,12 +230,14 @@ svg_template = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{SVG_WIDTH}" h
         .val {{ fill: #9fcff8; }}
         .add {{ fill: #3fb950; }}
         .del {{ fill: #f85149; }}
+        .header-title {{ fill: #FFFFFF; font-weight: bold; }}
 
         @media (prefers-color-scheme: light) {{
             .bg {{ fill: #f6f8fa; }}
             .val {{ fill: #0550ae; }}
             .dots {{ fill: #8c959f; }}
             .ascii {{ font-size: {ASCII_FONT_SIZE}px; fill: #212529; font-weight: bold; }}
+            .header-title {{ fill: #212529; font-weight: bold; }}
         }}
     </style>
     <rect width="100%" height="100%" rx="10" class="bg"/>
@@ -260,7 +262,7 @@ for row in lines_data:
     svg_template += f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" class="term-text" xml:space="preserve">'
     
     if row_type == "header":
-        svg_template += f'<tspan class="accent">{xml_escape(row[1])} </tspan><tspan class="dots">{xml_escape(row[2])}</tspan>'
+        svg_template += f'<tspan class="header-title">{xml_escape(row[1])} {xml_escape(row[2])}</tspan>'
     elif row_type == "item":
         svg_template += format_standard_row(row[1], row[2])
     elif row_type in ["stat_2col", "stat_loc"]:
