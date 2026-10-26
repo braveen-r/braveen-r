@@ -4,6 +4,10 @@ import json
 import urllib.request
 import urllib.error
 import xml.sax.saxutils
+from dotenv import load_dotenv
+
+# Load local .env file so manual runs can find the GitHub token!
+load_dotenv()
 
 # --- 1. DYNAMIC CALCULATIONS ---
 dob = datetime.datetime(2006, 11, 8, 22, 9)
@@ -23,11 +27,14 @@ else: battery = "[ CHARGING ] 100%"
 
 # --- 2. GITHUB API FETCH ---
 github_token = os.getenv("README_STATS_TOKEN")
-repos_count = 0
-contributed_count = 0
-stars_count = 0
-commits_count = 0
-followers_count = 0
+repos_count = "..."
+contributed_count = "..."
+stars_count = "..."
+commits_count = "..."
+followers_count = "..."
+loc_total_str = "..."
+loc_adds_str = "0++"
+loc_dels_str = "0--"
 
 if github_token:
     headers = {
@@ -64,27 +71,23 @@ if github_token:
         if result.get("errors"):
             raise RuntimeError("; ".join(error.get("message", "GraphQL error") for error in result["errors"]))
         data = result["data"]["viewer"]
-        repos_count = data["repositories"]["totalCount"]
-        contributed_count = data["repositoriesContributedTo"]["totalCount"]
-        followers_count = data["followers"]["totalCount"]
-        stars_count = sum(repo["stargazerCount"] for repo in data["repositories"]["nodes"])
-        commits_count = data["contributionsCollection"]["contributionCalendar"]["totalContributions"]
+        
+        # Apply fetched data
+        repos_count = f"{data['repositories']['totalCount']}"
+        contributed_count = f"{data['repositoriesContributedTo']['totalCount']}"
+        followers_count = f"{data['followers']['totalCount']:,}"
+        stars_count = f"{sum(repo['stargazerCount'] for repo in data['repositories']['nodes']):,}"
+        
+        raw_commits = data["contributionsCollection"]["contributionCalendar"]["totalContributions"]
+        commits_count = f"{raw_commits:,}"
+        
+        loc_adds = raw_commits * 125
+        loc_dels = int(raw_commits * 18)
+        loc_total_str = f"{(loc_adds - loc_dels):,}"
+        loc_adds_str = f"{loc_adds:,}++"
+        loc_dels_str = f"{loc_dels:,}--"
     except Exception as e:
         print(f"API Error: {e}")
-
-# Formatted strings with commas
-repos_str = f"{repos_count}"
-contrib_str = f"{contributed_count}"
-stars_str = f"{stars_count:,}"
-commits_str = f"{commits_count:,}"
-followers_str = f"{followers_count:,}"
-
-loc_adds = commits_count * 125
-loc_dels = int(commits_count * 18)
-loc_total = loc_adds - loc_dels
-loc_total_str = f"{loc_total:,}"
-loc_adds_str = f"{loc_adds:,}++"
-loc_dels_str = f"{loc_dels:,}--"
 
 # --- 3. ASCII LOAD ---
 try:
@@ -126,27 +129,25 @@ lines_data = [
     ("item", "Location", "Bangalore (Study) | Kerala (Home)"),
     ("empty", "", ""),
     ("header", "GitHub Stats", "------------------------------------------"),
-    ("stat_repos", f"{repos_str} {{Contributed: {contrib_str}}}", f"Stars: {stars_str}"),
-    ("stat_commits", f"{commits_str}", f"Followers: {followers_str}"),
-    ("stat_loc", f"{loc_total_str}", f"( {loc_adds_str}, {loc_dels_str} )"),
+    ("stat_2col", "Repos", f"{repos_count} {{Contributed: {contributed_count}}}", "Stars", stars_count),
+    ("stat_2col", "Commits", commits_count, "Followers", followers_count),
+    ("stat_1col", "Lines of Code", loc_total_str, f"( {loc_adds_str}, {loc_dels_str} )"),
 ]
 
 def xml_escape(value):
     return xml.sax.saxutils.escape(str(value))
 
-def terminal_row_text(row_type, key, val):
+def terminal_row_text(row_type, *args):
     if row_type == "header":
-        return f"{key} {val}"
+        return f"{args[0]} {args[1]}"
     if row_type == "item":
-        key_str = f". {key}:"
+        key_str = f". {args[0]}:"
         dots_len = max(24 - len(key_str), 1)
-        return key_str + " " + "." * dots_len + " " + str(val)
-    if row_type == "stat_repos":
-        return f". Repos: {key} | Stars: {val}"
-    if row_type == "stat_commits":
-        return f". Commmits: {key} | Followers: {val}"
-    if row_type == "stat_loc":
-        return f". Lines of Code on GitHub: {key} {val}"
+        return key_str + " " + "." * dots_len + " " + str(args[1])
+    if row_type == "stat_2col":
+        return f". {args[0]}: ................ {args[1]} | {args[2]}: ...... {args[3]}"
+    if row_type == "stat_1col":
+        return f". {args[0]}: ................ {args[1]} {args[2]}"
     return ""
 
 # --- 5. GENERATE SVG ---
@@ -163,7 +164,7 @@ ASCII_CHAR_WIDTH = ASCII_FONT_SIZE * 0.63
 TERM_CHAR_WIDTH = TERM_FONT_SIZE * 0.63
 
 ascii_width = max((len(line) * ASCII_CHAR_WIDTH for line in ascii_art), default=0)
-terminal_width = max((len(terminal_row_text(k, kv, v)) * TERM_CHAR_WIDTH for k, kv, v in lines_data if k != "empty"), default=0)
+terminal_width = max((len(terminal_row_text(row[0], *row[1:])) * TERM_CHAR_WIDTH for row in lines_data if row[0] != "empty"), default=0)
 
 ascii_height = max(len(ascii_art), 1) * ASCII_LINE_HEIGHT
 terminal_height = max(len(lines_data), 1) * TERM_LINE_HEIGHT
@@ -211,64 +212,75 @@ for i, line in enumerate(ascii_art):
 svg_template += "</g>\n"
 
 y_offset = TERMINAL_TOP + TERM_FONT_SIZE
-for row_type, key, val in lines_data:
+for row in lines_data:
+    row_type = row[0]
     if row_type == "empty":
         y_offset += TERM_LINE_HEIGHT
         continue
 
     if row_type == "header":
+        key, val = row[1], row[2]
         svg_template += (
-            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
-            f'class="term-text" xml:space="preserve">'
+            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" class="term-text" xml:space="preserve">'
             f'<tspan class="accent">{xml_escape(key)} </tspan>'
             f'<tspan class="dots">{xml_escape(val)}</tspan></text>\n'
         )
     elif row_type == "item":
+        key, val = row[1], row[2]
         key_str = f". {key}:"
         dots_len = max(24 - len(key_str), 1)
         dots_str = " " + "." * dots_len + " "
         svg_template += (
-            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
-            f'class="term-text" xml:space="preserve">'
+            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" class="term-text" xml:space="preserve">'
             f'<tspan class="accent">{xml_escape(key_str)}</tspan>'
             f'<tspan class="dots">{xml_escape(dots_str)}</tspan>'
             f'<tspan class="val">{xml_escape(val)}</tspan></text>\n'
         )
-    elif row_type == "stat_repos":
+    elif row_type == "stat_2col":
+        _, k1, v1, k2, v2 = row
+        k1_str = f". {k1}:"
+        k2_str = f"{k2}:"
+        
+        # Calculate dots for perfect alignment
+        dots1_len = max(34 - len(k1_str) - len(str(v1)), 1)
+        dots1 = " " + "." * dots1_len + " "
+        dots2_len = max(18 - len(k2_str) - len(str(v2)), 1)
+        dots2 = " " + "." * dots2_len + " "
+
         svg_template += (
-            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
-            f'class="term-text" xml:space="preserve">'
-            f'<tspan class="accent">. Repos: </tspan>'
-            f'<tspan class="val">{xml_escape(key)}</tspan>'
+            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" class="term-text" xml:space="preserve">'
+            f'<tspan class="accent">{xml_escape(k1_str)}</tspan>'
+            f'<tspan class="dots">{xml_escape(dots1)}</tspan>'
+            f'<tspan class="val">{xml_escape(v1)}</tspan>'
             f'<tspan class="dots"> | </tspan>'
-            f'<tspan class="accent">Stars: </tspan>'
-            f'<tspan class="val">{xml_escape(val.replace("Stars: ", ""))}</tspan></text>\n'
+            f'<tspan class="accent">{xml_escape(k2_str)}</tspan>'
+            f'<tspan class="dots">{xml_escape(dots2)}</tspan>'
+            f'<tspan class="val">{xml_escape(v2)}</tspan></text>\n'
         )
-    elif row_type == "stat_commits":
+    elif row_type == "stat_1col":
+        _, k1, v1, v2 = row
+        k1_str = f". {k1}:"
+        
+        dots1_len = max(34 - len(k1_str) - len(str(v1)), 1)
+        dots1 = " " + "." * dots1_len + " "
+        
+        # Parse out the additions and deletions for coloring
+        parts = v2.replace("( ", "").replace(" )", "").split(", ")
+        adds = parts[0]
+        dels = parts[1]
+
         svg_template += (
-            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
-            f'class="term-text" xml:space="preserve">'
-            f'<tspan class="accent">. Commmits: </tspan>'
-            f'<tspan class="val">{xml_escape(key)}</tspan>'
-            f'<tspan class="dots"> | </tspan>'
-            f'<tspan class="accent">Followers: </tspan>'
-            f'<tspan class="val">{xml_escape(val.replace("Followers: ", ""))}</tspan></text>\n'
-        )
-    elif row_type == "stat_loc":
-        parts = val.split(", ")
-        adds = parts[0].replace("( ", "")
-        dels = parts[1].replace(" )", "")
-        svg_template += (
-            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" '
-            f'class="term-text" xml:space="preserve">'
-            f'<tspan class="accent">. Lines of Code on GitHub: </tspan>'
-            f'<tspan class="val">{xml_escape(key)}</tspan>'
+            f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" class="term-text" xml:space="preserve">'
+            f'<tspan class="accent">{xml_escape(k1_str)}</tspan>'
+            f'<tspan class="dots">{xml_escape(dots1)}</tspan>'
+            f'<tspan class="val">{xml_escape(v1)}</tspan>'
             f'<tspan class="dots"> ( </tspan>'
             f'<tspan class="add">{xml_escape(adds)}</tspan>'
             f'<tspan class="dots">, </tspan>'
             f'<tspan class="del">{xml_escape(dels)}</tspan>'
             f'<tspan class="dots"> )</tspan></text>\n'
         )
+        
     y_offset += TERM_LINE_HEIGHT
 
 svg_template += "</svg>\n"
@@ -276,4 +288,4 @@ svg_template += "</svg>\n"
 with open("terminal.svg", "w", encoding="utf-8") as f:
     f.write(svg_template)
 
-print("terminal.svg generated with full stats breakdown!")
+print("terminal.svg generated with aligned stats!")
