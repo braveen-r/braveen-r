@@ -1,43 +1,44 @@
-name: Update GitHub Profile README
+name: Update Terminal SVG
 
 on:
   schedule:
-    - cron: "0 0 * * *"
-  workflow_dispatch:
-  push:
-    branches:
-      - main
-
-# Add this permissions block here:
-permissions:
-  contents: write
+    # Runs at 18:30 UTC every day, which is exactly 00:00 (Midnight) IST
+    - cron: '30 18 * * *'
+  workflow_dispatch: # Allows you to click a button in GitHub to run it manually
 
 jobs:
-  build:
+  update-svg:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Grants the action permission to push the updated SVG back to your repo
+
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11' # You can specify any recent 3.x version
 
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests python-dateutil lxml python-dotenv
+          pip install python-dotenv
 
-      - name: Run SVG Generator Script
+      - name: Run Python Script to Generate SVG
         env:
+          # Pulls your token from GitHub Secrets and injects it as an environment variable
           README_STATS_TOKEN: ${{ secrets.README_STATS_TOKEN }}
-          USER_NAME: "Braveen811"
-        run: python generate_svg.py
+        # Replace 'script.py' with the actual name of your Python file
+        run: python script.py 
 
-      - name: Commit and Push Updated SVG
+      - name: Commit and Push Changes
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.io"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add terminal.svg
-          git diff --quiet && git diff --cached --quiet || (git commit -m "chore: auto-update terminal profile SVG [skip ci]" && git push)
+          
+          # This checks if there are actually any changes before trying to commit.
+          # It prevents the workflow from failing on days where the stats/uptime don't change.
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update terminal.svg uptime and stats" && git push)

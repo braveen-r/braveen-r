@@ -16,9 +16,16 @@ def xml_escape(value):
 # --- 1. DYNAMIC CALCULATIONS ---
 dob = datetime.datetime(2006, 11, 8, 22, 9)
 now = datetime.datetime.now()
-days_alive = (now - dob).days
-years = days_alive // 365
-days_remainder = days_alive % 365
+
+# Exact years alive (handles leap years perfectly)
+years = now.year - dob.year - ((now.month, now.day) < (dob.month, dob.day))
+
+# Find the most recent birthday to calculate exact days remaining
+last_birthday_year = now.year if (now.month, now.day) >= (dob.month, dob.day) else now.year - 1
+last_birthday = dob.replace(year=last_birthday_year)
+
+days_remainder = (now - last_birthday).days
+
 uptime_string = f"{years} years, {days_remainder} days (Level {years})"
 
 weekday = now.weekday()
