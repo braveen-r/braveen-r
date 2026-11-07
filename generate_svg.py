@@ -24,7 +24,8 @@ years = now.year - dob.year - ((now.month, now.day) < (dob.month, dob.day))
 last_birthday_year = now.year if (now.month, now.day) >= (dob.month, dob.day) else now.year - 1
 last_birthday = dob.replace(year=last_birthday_year)
 
-days_remainder = (now - last_birthday).days
+# Use .date() to compare only the calendar days, ignoring hours/minutes
+days_remainder = (now.date() - last_birthday.date()).days
 
 uptime_string = f"{years} years, {days_remainder} days (Level {years})"
 
