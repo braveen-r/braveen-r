@@ -14,17 +14,21 @@ def xml_escape(value):
     return xml.sax.saxutils.escape(str(value))
 
 # --- 1. DYNAMIC CALCULATIONS ---
-dob = datetime.datetime(2006, 11, 8, 22, 9)
-now = datetime.datetime.now()
+# Define DOB
+dob = datetime.datetime(2006, 11, 8)
+
+# Convert server UTC time to India Standard Time (IST) 
+now_utc = datetime.datetime.now(datetime.timezone.utc)
+now = now_utc + datetime.timedelta(hours=5, minutes=30)
 
 # Exact years alive (handles leap years perfectly)
 years = now.year - dob.year - ((now.month, now.day) < (dob.month, dob.day))
 
-# Find the most recent birthday to calculate exact days remaining
+# Find the most recent birthday
 last_birthday_year = now.year if (now.month, now.day) >= (dob.month, dob.day) else now.year - 1
-last_birthday = dob.replace(year=last_birthday_year)
+last_birthday = datetime.datetime(last_birthday_year, dob.month, dob.day)
 
-# Use .date() to compare only the calendar days, ignoring hours/minutes
+# Exact days remaining
 days_remainder = (now.date() - last_birthday.date()).days
 
 uptime_string = f"{years} years, {days_remainder} days (Level {years})"
