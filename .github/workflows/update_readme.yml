@@ -31,7 +31,7 @@ jobs:
           # Pulls your token from GitHub Secrets and injects it as an environment variable
           README_STATS_TOKEN: ${{ secrets.README_STATS_TOKEN }}
         # Replace 'script.py' with the actual name of your Python file
-        run: python script.py 
+        run: python generate_svg.py
 
       - name: Commit and Push Changes
         run: |
