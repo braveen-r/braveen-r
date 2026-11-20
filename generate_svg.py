@@ -187,7 +187,7 @@ lines_data = [
     ("item", "Hobbies", "System Ricing, Action RPGs, Anime"),
     ("empty", ""),
     ("header", "Contact", "---------------------------------------------------"),
-    ("item", "Portfolio", "portfolio-weld-rho-75.vercel.app"),
+    ("item", "Portfolio", "braveenr.vercel.app"),
     ("item", "Email", "braveenrprogrammer811@gmail.com"),
     ("item", "LinkedIn", "Braveen R"),
     ("item", "X (Twitter)", "@braveenruban"),
