@@ -1,23 +1,25 @@
 import datetime
-import os
 import json
-import urllib.request
+import os
 import urllib.error
+import urllib.request
 import xml.sax.saxutils
 from dotenv import load_dotenv
 
 # Load local .env file
 load_dotenv()
 
+
 # --- DEFINE ESCAPE FUNCTION FIRST ---
 def xml_escape(value):
     return xml.sax.saxutils.escape(str(value))
+
 
 # --- 1. DYNAMIC CALCULATIONS ---
 # Define DOB
 dob = datetime.datetime(2006, 11, 8)
 
-# Convert server UTC time to India Standard Time (IST) 
+# Convert server UTC time to India Standard Time (IST)
 now_utc = datetime.datetime.now(datetime.timezone.utc)
 now = now_utc + datetime.timedelta(hours=5, minutes=30)
 
@@ -25,7 +27,9 @@ now = now_utc + datetime.timedelta(hours=5, minutes=30)
 years = now.year - dob.year - ((now.month, now.day) < (dob.month, dob.day))
 
 # Find the most recent birthday
-last_birthday_year = now.year if (now.month, now.day) >= (dob.month, dob.day) else now.year - 1
+last_birthday_year = (
+    now.year if (now.month, now.day) >= (dob.month, dob.day) else now.year - 1
+)
 last_birthday = datetime.datetime(last_birthday_year, dob.month, dob.day)
 
 # Exact days remaining
@@ -34,12 +38,18 @@ days_remainder = (now.date() - last_birthday.date()).days
 uptime_string = f"{years} years, {days_remainder} days (Level {years})"
 
 weekday = now.weekday()
-if weekday == 0: battery = "[██████████] 100%"
-elif weekday == 1: battery = "[████████░░] 80%"
-elif weekday == 2: battery = "[██████░░░░] 60%"
-elif weekday == 3: battery = "[████░░░░░░] 40%"
-elif weekday == 4: battery = "[██░░░░░░░░] 20%"
-else: battery = "[ CHARGING ] 100%"
+if weekday == 0:
+    battery = "[██████████] 100%"
+elif weekday == 1:
+    battery = "[████████░░] 80%"
+elif weekday == 2:
+    battery = "[██████░░░░] 60%"
+elif weekday == 3:
+    battery = "[████░░░░░░] 40%"
+elif weekday == 4:
+    battery = "[██░░░░░░░░] 20%"
+else:
+    battery = "[ CHARGING ] 100%"
 
 # --- 2. GITHUB API FETCH ---
 github_token = os.getenv("README_STATS_TOKEN") or os.getenv("ACCESS_TOKEN")
@@ -89,15 +99,15 @@ if github_token:
             print("GraphQL Error:", result["errors"])
         else:
             data = result["data"]["viewer"]
-            
+
             repos_count = f"{data['repositories']['totalCount']}"
             contributed_count = f"{data['repositoriesContributedTo']['totalCount']}"
             followers_count = f"{data['followers']['totalCount']:,}"
             stars_count = f"{sum(repo['stargazerCount'] for repo in data['repositories']['nodes']):,}"
-            
+
             raw_commits = data["contributionsCollection"]["contributionCalendar"]["totalContributions"]
             commits_count = f"{raw_commits:,}"
-            
+
             loc_adds = raw_commits * 125
             loc_dels = int(raw_commits * 18)
             loc_total_str = f"{(loc_adds - loc_dels):,}"
@@ -123,15 +133,16 @@ except FileNotFoundError:
 COL1_WIDTH = 38
 COL2_WIDTH = 22
 
+
 def format_stat_row(k1, v1, k2, v2):
     left_key = f". {k1}: "
     left_val = f" {v1} "
     left_dots_count = max(COL1_WIDTH - len(left_key) - len(left_val), 1)
-    
+
     right_key = f"| {k2}: "
     right_val = f" {v2}"
     right_dots_count = max(COL2_WIDTH - len(right_key) - len(right_val), 1)
-    
+
     return (
         f'<tspan class="accent">{xml_escape(left_key)}</tspan>'
         f'<tspan class="dots">{"." * left_dots_count}</tspan>'
@@ -142,11 +153,12 @@ def format_stat_row(k1, v1, k2, v2):
         f'<tspan class="val">{xml_escape(right_val)}</tspan>'
     )
 
+
 def format_loc_row(k1, total, adds, dels):
     left_key = f". {k1}: "
     left_val = f" {total} "
     left_dots_count = max(COL1_WIDTH - len(left_key) - len(left_val), 1)
-    
+
     return (
         f'<tspan class="accent">{xml_escape(left_key)}</tspan>'
         f'<tspan class="dots">{"." * left_dots_count}</tspan>'
@@ -158,6 +170,7 @@ def format_loc_row(k1, total, adds, dels):
         f'<tspan class="dots"> )</tspan>'
     )
 
+
 def format_standard_row(k, v):
     key_str = f". {k}:"
     dots_len = max(24 - len(key_str), 1)
@@ -166,6 +179,7 @@ def format_standard_row(k, v):
         f'<tspan class="dots"> {"." * dots_len} </tspan>'
         f'<tspan class="val">{xml_escape(v)}</tspan>'
     )
+
 
 lines_data = [
     ("header", "sunraku@archlinux", "-----------------------------------------"),
@@ -187,7 +201,7 @@ lines_data = [
     ("item", "Hobbies", "System Ricing, Action RPGs, Anime"),
     ("empty", ""),
     ("header", "Contact", "---------------------------------------------------"),
-    ("item", "Portfolio", "braveenr.vercel.app"),
+    ("item", "Portfolio", "braveenr.runs-on.dev"),
     ("item", "Email", "braveenrprogrammer811@gmail.com"),
     ("item", "LinkedIn", "Braveen R"),
     ("item", "X (Twitter)", "@braveenruban"),
@@ -212,10 +226,20 @@ TERM_FONT_SIZE = 13
 TERM_LINE_HEIGHT = 19
 
 ASCII_CHAR_WIDTH = ASCII_FONT_SIZE * 0.63
-TERM_CHAR_WIDTH = TERM_FONT_SIZE * 0.63
+TERM_CHAR_WIDTH = TERM_FONT_SIZE * 0.64
 
 ascii_width = max((len(line) * ASCII_CHAR_WIDTH for line in ascii_art), default=0)
-terminal_width = 68 * TERM_CHAR_WIDTH  # Fixed width for standard alignment
+
+max_line_chars = 68
+for row in lines_data:
+    if row[0] == "header":
+        max_line_chars = max(max_line_chars, len(f"{row[1]} {row[2]}"))
+    elif row[0] == "item":
+        max_line_chars = max(max_line_chars, len(f". {row[1]}: .... {row[2]}"))
+    elif row[0] in ("stat_2col", "stat_loc"):
+        max_line_chars = max(max_line_chars, COL1_WIDTH + COL2_WIDTH + 24)
+
+terminal_width = max_line_chars * TERM_CHAR_WIDTH
 
 ascii_height = max(len(ascii_art), 1) * ASCII_LINE_HEIGHT
 terminal_height = max(len(lines_data), 1) * TERM_LINE_HEIGHT
@@ -272,15 +296,15 @@ for row in lines_data:
         continue
 
     svg_template += f'<text x="{TERMINAL_X:.2f}" y="{y_offset:.2f}" class="term-text" xml:space="preserve">'
-    
+
     if row_type == "header":
         svg_template += f'<tspan class="header-title">{xml_escape(row[1])} {xml_escape(row[2])}</tspan>'
     elif row_type == "item":
         svg_template += format_standard_row(row[1], row[2])
     elif row_type in ["stat_2col", "stat_loc"]:
         svg_template += row[1]
-        
-    svg_template += '</text>\n'
+
+    svg_template += "</text>\n"
     y_offset += TERM_LINE_HEIGHT
 
 svg_template += "</svg>\n"
