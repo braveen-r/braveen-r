@@ -7,7 +7,7 @@ import xml.sax.saxutils
 from dotenv import load_dotenv
 
 # Load local .env file
-load_dotenv()
+load_dotenv(override=True)
 
 
 # --- DEFINE ESCAPE FUNCTION FIRST ---
@@ -130,18 +130,18 @@ except FileNotFoundError:
     ascii_art = ["Error: ascii-art.txt not found."]
 
 # --- 4. FORMATTING ENGINE ---
-COL1_WIDTH = 38
-COL2_WIDTH = 22
+COL1_WIDTH = 44
+COL2_WIDTH = 26
 
 
 def format_stat_row(k1, v1, k2, v2):
     left_key = f". {k1}: "
     left_val = f" {v1} "
-    left_dots_count = max(COL1_WIDTH - len(left_key) - len(left_val), 1)
+    left_dots_count = max(COL1_WIDTH - len(left_key) - len(left_val), 2)
 
     right_key = f"| {k2}: "
     right_val = f" {v2}"
-    right_dots_count = max(COL2_WIDTH - len(right_key) - len(right_val), 1)
+    right_dots_count = max(COL2_WIDTH - len(right_key) - len(right_val), 2)
 
     return (
         f'<tspan class="accent">{xml_escape(left_key)}</tspan>'
@@ -157,7 +157,7 @@ def format_stat_row(k1, v1, k2, v2):
 def format_loc_row(k1, total, adds, dels):
     left_key = f". {k1}: "
     left_val = f" {total} "
-    left_dots_count = max(COL1_WIDTH - len(left_key) - len(left_val), 1)
+    left_dots_count = max(COL1_WIDTH - len(left_key) - len(left_val), 2)
 
     return (
         f'<tspan class="accent">{xml_escape(left_key)}</tspan>'
@@ -173,7 +173,7 @@ def format_loc_row(k1, total, adds, dels):
 
 def format_standard_row(k, v):
     key_str = f". {k}:"
-    dots_len = max(24 - len(key_str), 1)
+    dots_len = max(28 - len(key_str), 2)
     return (
         f'<tspan class="accent">{xml_escape(key_str)}</tspan>'
         f'<tspan class="dots"> {"." * dots_len} </tspan>'
@@ -182,7 +182,7 @@ def format_standard_row(k, v):
 
 
 lines_data = [
-    ("header", "sunraku@archlinux", "-----------------------------------------"),
+    ("header", "sunraku@archlinux", "-------------------------------------------------"),
     ("item", "OS", "Arch Linux, Windows 11, Android"),
     ("item", "Player.Active", uptime_string),
     ("item", "Role", "Cloud & DevOps Eng."),
@@ -200,7 +200,7 @@ lines_data = [
     ("item", "Hardware", "ASUS Vivobook (AMD Ryzen 3)"),
     ("item", "Hobbies", "System Ricing, Action RPGs, Anime"),
     ("empty", ""),
-    ("header", "Contact", "---------------------------------------------------"),
+    ("header", "Contact", "---------------------------------------------------------"),
     ("item", "Portfolio", "braveenr.runs-on.dev"),
     ("item", "Email", "braveenrprogrammer811@gmail.com"),
     ("item", "LinkedIn", "Braveen R"),
@@ -209,35 +209,35 @@ lines_data = [
     ("item", "Discord", "itz_sunraku"),
     ("item", "Location", "Bangalore (Study) | Kerala (Home)"),
     ("empty", ""),
-    ("header", "GitHub Stats", "----------------------------------------------"),
+    ("header", "GitHub Stats", "----------------------------------------------------"),
     ("stat_2col", format_stat_row("Repos", f"{repos_count} {{Contributed: {contributed_count}}}", "Stars", stars_count)),
     ("stat_2col", format_stat_row("Commits", commits_count, "Followers", followers_count)),
     ("stat_loc", format_loc_row("Lines of Code", loc_total_str, loc_adds_str, loc_dels_str)),
 ]
 
 # --- 5. GENERATE SVG ---
-PADDING_X = 30
-PADDING_Y = 30
-GAP = 32
+PADDING_X = 36
+PADDING_Y = 34
+GAP = 44
 
 ASCII_FONT_SIZE = 10
 ASCII_LINE_HEIGHT = 11
-TERM_FONT_SIZE = 13
-TERM_LINE_HEIGHT = 19
+TERM_FONT_SIZE = 14
+TERM_LINE_HEIGHT = 24
 
 ASCII_CHAR_WIDTH = ASCII_FONT_SIZE * 0.63
-TERM_CHAR_WIDTH = TERM_FONT_SIZE * 0.64
+TERM_CHAR_WIDTH = TERM_FONT_SIZE * 0.65
 
 ascii_width = max((len(line) * ASCII_CHAR_WIDTH for line in ascii_art), default=0)
 
-max_line_chars = 68
+max_line_chars = 78
 for row in lines_data:
     if row[0] == "header":
         max_line_chars = max(max_line_chars, len(f"{row[1]} {row[2]}"))
     elif row[0] == "item":
         max_line_chars = max(max_line_chars, len(f". {row[1]}: .... {row[2]}"))
     elif row[0] in ("stat_2col", "stat_loc"):
-        max_line_chars = max(max_line_chars, COL1_WIDTH + COL2_WIDTH + 24)
+        max_line_chars = max(max_line_chars, COL1_WIDTH + COL2_WIDTH + 26)
 
 terminal_width = max_line_chars * TERM_CHAR_WIDTH
 
