@@ -130,36 +130,51 @@ except FileNotFoundError:
     ascii_art = ["Error: ascii-art.txt not found."]
 
 # --- 4. FORMATTING ENGINE ---
-COL1_WIDTH = 44
-COL2_WIDTH = 26
+VALUE_COL = 48       # Column where standard item values begin
+STAT_COL1_END = 56   # Column where left stat value ends
+STAT_COL2_END = 82   # Column where right stat value ends
 
 
 def format_stat_row(k1, v1, k2, v2):
     left_key = f". {k1}: "
     left_val = f" {v1} "
-    left_dots_count = max(COL1_WIDTH - len(left_key) - len(left_val), 2)
+    left_dots_count = max(STAT_COL1_END - len(left_key) - len(left_val), 4)
 
-    right_key = f"| {k2}: "
+    right_key = f"{k2}: "
     right_val = f" {v2}"
-    right_dots_count = max(COL2_WIDTH - len(right_key) - len(right_val), 2)
+    right_dots_count = max(STAT_COL2_END - STAT_COL1_END - 3 - len(right_key) - len(right_val), 4)
 
-    return (
+    plain_len = (
+        len(left_key)
+        + left_dots_count
+        + len(left_val)
+        + 3
+        + len(right_key)
+        + right_dots_count
+        + len(right_val)
+    )
+
+    markup = (
         f'<tspan class="accent">{xml_escape(left_key)}</tspan>'
         f'<tspan class="dots">{"." * left_dots_count}</tspan>'
         f'<tspan class="val">{xml_escape(left_val)}</tspan>'
-        f'<tspan class="dots">| </tspan>'
-        f'<tspan class="accent">{xml_escape(k2)}: </tspan>'
+        f'<tspan class="dots"> | </tspan>'
+        f'<tspan class="accent">{xml_escape(right_key)}</tspan>'
         f'<tspan class="dots">{"." * right_dots_count}</tspan>'
         f'<tspan class="val">{xml_escape(right_val)}</tspan>'
     )
+    return markup, plain_len
 
 
 def format_loc_row(k1, total, adds, dels):
     left_key = f". {k1}: "
     left_val = f" {total} "
-    left_dots_count = max(COL1_WIDTH - len(left_key) - len(left_val), 2)
+    left_dots_count = max(STAT_COL1_END - len(left_key) - len(left_val), 4)
+    delta_tail = f" ( {adds}++, {dels}-- )"
 
-    return (
+    plain_len = len(left_key) + left_dots_count + len(left_val) + len(delta_tail)
+
+    markup = (
         f'<tspan class="accent">{xml_escape(left_key)}</tspan>'
         f'<tspan class="dots">{"." * left_dots_count}</tspan>'
         f'<tspan class="val">{xml_escape(left_val)}</tspan>'
@@ -169,77 +184,102 @@ def format_loc_row(k1, total, adds, dels):
         f'<tspan class="del">{xml_escape(dels)}--</tspan>'
         f'<tspan class="dots"> )</tspan>'
     )
+    return markup, plain_len
 
 
 def format_standard_row(k, v):
-    key_str = f". {k}:"
-    dots_len = max(28 - len(key_str), 2)
-    return (
-        f'<tspan class="accent">{xml_escape(key_str)}</tspan>'
-        f'<tspan class="dots"> {"." * dots_len} </tspan>'
+    key_prefix = f". {k}: "
+    dots_count = max(VALUE_COL - len(key_prefix), 4)
+    plain_len = len(key_prefix) + dots_count + 1 + len(v)
+    markup = (
+        f'<tspan class="accent">{xml_escape(key_prefix)}</tspan>'
+        f'<tspan class="dots">{"." * dots_count} </tspan>'
         f'<tspan class="val">{xml_escape(v)}</tspan>'
     )
+    return markup, plain_len
 
+
+standard_items = [
+    ("OS", "Arch Linux, Windows 11, Android"),
+    ("Player.Active", uptime_string),
+    ("Role", "Cloud & DevOps Eng."),
+    ("Desktop", "Hyprland, Win Explorer"),
+    ("Shell", "zsh, PowerShell"),
+    ("IDE", "Neovim, VS Code, Cursor"),
+    ("Battery", battery),
+    ("Fuel", "Coffee"),
+    ("Audio", "The Life of Ram | Govind Vasantha"),
+    ("Languages.Core", "JavaScript, Python, Bash, C"),
+    ("Languages.Web", "HTML, Tailwind, React, Node"),
+    ("Languages.Real", "English, Tamil, Malayalam"),
+    ("DevOps and DB", "Docker, Actions, Vercel, DuckDB"),
+    ("Hardware", "ASUS Vivobook (AMD Ryzen 3)"),
+    ("Hobbies", "System Ricing, Action RPGs, Anime"),
+    ("Portfolio", "braveenr.runs-on.dev"),
+    ("Email", "braveenrprogrammer811@gmail.com"),
+    ("LinkedIn", "Braveen R"),
+    ("X (Twitter)", "@braveenruban"),
+    ("Instagram", "braveen_r"),
+    ("Discord", "itz_sunraku"),
+    ("Location", "Bangalore (Study) | Kerala (Home)"),
+]
+
+stat_repos_markup, stat_repos_len = format_stat_row(
+    "Repos", f"{repos_count} {{Contributed: {contributed_count}}}", "Stars", stars_count
+)
+stat_commits_markup, stat_commits_len = format_stat_row(
+    "Commits", commits_count, "Followers", followers_count
+)
+stat_loc_markup, stat_loc_len = format_loc_row(
+    "Lines of Code", loc_total_str, loc_adds_str, loc_dels_str
+)
+
+# Match header dashes to the exact widest row so the right edge stays crisp
+widest_row_chars = max(
+    [stat_repos_len, stat_commits_len, stat_loc_len]
+    + [format_standard_row(k, v)[1] for k, v in standard_items]
+)
+
+
+def make_header(title):
+    dashes = "-" * max(widest_row_chars - len(title) - 1, 8)
+    return title, dashes, len(f"{title} {dashes}")
+
+
+h1_title, h1_dashes, h1_len = make_header("sunraku@archlinux")
+h2_title, h2_dashes, h2_len = make_header("Contact")
+h3_title, h3_dashes, h3_len = make_header("GitHub Stats")
 
 lines_data = [
-    ("header", "sunraku@archlinux", "-------------------------------------------------"),
-    ("item", "OS", "Arch Linux, Windows 11, Android"),
-    ("item", "Player.Active", uptime_string),
-    ("item", "Role", "Cloud & DevOps Eng."),
-    ("item", "Desktop", "Hyprland, Win Explorer"),
-    ("item", "Shell", "zsh, PowerShell"),
-    ("item", "IDE", "Neovim, VS Code, Cursor"),
-    ("item", "Battery", battery),
-    ("item", "Fuel", "Coffee"),
-    ("item", "Audio", "The Life of Ram | Govind Vasantha"),
+    ("header", h1_title, h1_dashes, h1_len),
+    *[("item", k, v) for k, v in standard_items[:9]],
     ("empty", ""),
-    ("item", "Languages.Core", "JavaScript, Python, Bash, C"),
-    ("item", "Languages.Web", "HTML, Tailwind, React, Node"),
-    ("item", "Languages.Real", "English, Tamil, Malayalam"),
-    ("item", "DevOps and DB", "Docker, Actions, Vercel, DuckDB"),
-    ("item", "Hardware", "ASUS Vivobook (AMD Ryzen 3)"),
-    ("item", "Hobbies", "System Ricing, Action RPGs, Anime"),
+    *[("item", k, v) for k, v in standard_items[9:15]],
     ("empty", ""),
-    ("header", "Contact", "---------------------------------------------------------"),
-    ("item", "Portfolio", "braveenr.runs-on.dev"),
-    ("item", "Email", "braveenrprogrammer811@gmail.com"),
-    ("item", "LinkedIn", "Braveen R"),
-    ("item", "X (Twitter)", "@braveenruban"),
-    ("item", "Instagram", "braveen_r"),
-    ("item", "Discord", "itz_sunraku"),
-    ("item", "Location", "Bangalore (Study) | Kerala (Home)"),
+    ("header", h2_title, h2_dashes, h2_len),
+    *[("item", k, v) for k, v in standard_items[15:22]],
     ("empty", ""),
-    ("header", "GitHub Stats", "----------------------------------------------------"),
-    ("stat_2col", format_stat_row("Repos", f"{repos_count} {{Contributed: {contributed_count}}}", "Stars", stars_count)),
-    ("stat_2col", format_stat_row("Commits", commits_count, "Followers", followers_count)),
-    ("stat_loc", format_loc_row("Lines of Code", loc_total_str, loc_adds_str, loc_dels_str)),
+    ("header", h3_title, h3_dashes, h3_len),
+    ("stat_raw", stat_repos_markup, stat_repos_len),
+    ("stat_raw", stat_commits_markup, stat_commits_len),
+    ("stat_raw", stat_loc_markup, stat_loc_len),
 ]
 
 # --- 5. GENERATE SVG ---
-PADDING_X = 36
-PADDING_Y = 34
-GAP = 44
+PADDING_X = 32
+PADDING_Y = 30
+GAP = 34
 
 ASCII_FONT_SIZE = 10
 ASCII_LINE_HEIGHT = 11
-TERM_FONT_SIZE = 14
-TERM_LINE_HEIGHT = 24
+TERM_FONT_SIZE = 13
+TERM_LINE_HEIGHT = 20
 
 ASCII_CHAR_WIDTH = ASCII_FONT_SIZE * 0.63
 TERM_CHAR_WIDTH = TERM_FONT_SIZE * 0.65
 
 ascii_width = max((len(line) * ASCII_CHAR_WIDTH for line in ascii_art), default=0)
-
-max_line_chars = 78
-for row in lines_data:
-    if row[0] == "header":
-        max_line_chars = max(max_line_chars, len(f"{row[1]} {row[2]}"))
-    elif row[0] == "item":
-        max_line_chars = max(max_line_chars, len(f". {row[1]}: .... {row[2]}"))
-    elif row[0] in ("stat_2col", "stat_loc"):
-        max_line_chars = max(max_line_chars, COL1_WIDTH + COL2_WIDTH + 26)
-
-terminal_width = max_line_chars * TERM_CHAR_WIDTH
+terminal_width = (widest_row_chars + 1) * TERM_CHAR_WIDTH
 
 ascii_height = max(len(ascii_art), 1) * ASCII_LINE_HEIGHT
 terminal_height = max(len(lines_data), 1) * TERM_LINE_HEIGHT
@@ -300,8 +340,9 @@ for row in lines_data:
     if row_type == "header":
         svg_template += f'<tspan class="header-title">{xml_escape(row[1])} {xml_escape(row[2])}</tspan>'
     elif row_type == "item":
-        svg_template += format_standard_row(row[1], row[2])
-    elif row_type in ["stat_2col", "stat_loc"]:
+        item_markup, _ = format_standard_row(row[1], row[2])
+        svg_template += item_markup
+    elif row_type == "stat_raw":
         svg_template += row[1]
 
     svg_template += "</text>\n"
